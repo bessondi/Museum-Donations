@@ -1,0 +1,23 @@
+// content
+$contentBackground: #eee;
+
+// form
+$formBackground: #fff;
+$linkColor: #007bff;
+
+// fields
+$inputBorder: #6c757d;
+$validInputBorder: #28a745;
+$invalidInputBorder: #dc3545;
+
+// options btn's
+$optionBtn: #eee;
+$hoverOptionBtn: #e0e0e0;
+$activeOptionBtn: #343a40;
+$hoverActiveOptionBtn: #202428;
+
+// submit btn
+//$hoverInvalidPaymentBtn: #5a6269;
+$invalidPaymentBtn: $inputBorder;
+$validPaymentBtn: $validInputBorder;
+$hoverValidPaymentBtn: #23923c;
