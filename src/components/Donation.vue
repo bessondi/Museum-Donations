@@ -79,10 +79,10 @@
       <!-- btn -->
       <div class="field">
         <input class="submitBtn" id="submit" type="submit"
-          :class="$store.state.isNameValid && $store.state.isEmailValid
+               :class="$store.state.isNameValid && $store.state.isEmailValid
           && $store.state.isOfferAgreement && $store.state.isBtnActive
             ? 'active' : ''"
-          :value="`Пожертвовать ${ $store.state.amountValue ? $store.state.amountValue + ' руб.' : ''}`">
+               :value="`Пожертвовать ${ $store.state.amountValue ? $store.state.amountValue + ' руб.' : ''}`">
       </div>
       <div class="paymentLogos">
         <img v-for="icon in paymentIcons" class="logo" :src="icon.logo" :alt="icon.alt">
@@ -168,9 +168,9 @@
         },
         set(value) {
           this.$store.commit('updateName', value)
-          this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length < 60 ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
-          // console.log(this.$store.state.isNameValid)
-          // this.isFormValid()
+          this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length < 60
+            ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
+          this.isFormValid()
         }
       },
       email: {
@@ -180,7 +180,7 @@
         set(value) {
           this.$store.commit('updateEmail', value)
           this.$store.commit('emailValid', this.isMailValid(this.email))
-          // this.isFormValid()
+          this.isFormValid()
         }
       },
       offerAgreement: {
@@ -189,7 +189,7 @@
         },
         set(value) {
           this.$store.commit('updateOfferAgreement', value)
-          // this.isFormValid()
+          this.isFormValid()
         }
       },
       recurrent: {
@@ -206,37 +206,15 @@
         },
         set(value) {
           this.$store.commit('updateAmount', value)
-          // this.isFormValid()
+          this.isFormValid()
         }
       },
-      isFormValid: {
-        get() {
-          this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
-            ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
-
-          return this.$store.state.isBtnActive
-        },
-        // set(value) {
-        // }
-      },
-
-      // emailValid: {
-      //   get() {
-      //     return this.$store.state.amountValue
-      //   },
-      //   set(value) {
-      //     this.$store.commit('updateAmount', value)
-      //   }
-      // },
-
     },
     methods: {
       setAmount(value) {
         this.$store.commit('addAmount', value)
-        // this.isFormValid()
+        this.isFormValid()
       },
-
-
       isMailValid(value) {
         const mailPattern = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{2,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,5}|[0-9]{1,3})(\]?)$/
         if (value.length === 0 || value.toLowerCase().match(mailPattern) === null) {
@@ -244,15 +222,6 @@
         }
         return true
       },
-      // getAmount(num) {
-      //   if (typeof num === 'number') {
-      //     this.amountValue = num
-      //     this.isAmountFieldVisible = false
-      //   } else if (num === 'other') {
-      //     this.amountValue = ''
-      //     this.isAmountFieldVisible = true
-      //   }
-      // },
       getPay() {
         if (
           this.nameValue !== ''
@@ -261,41 +230,17 @@
           && this.$store.state.amountValue >= 50
           && this.$store.state.isBtnActive
         ) {
-          const isRecurrent = this.recurrentPicked === 'single' ? false : this.recurrentPicked === 'monthly' ? true : null
+          const isRecurrent = this.$store.state.recurrentPicked === 'single'
+            ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
 
           changeRouter(this)
-          pay(this.amountValue, this.emailValue, isRecurrent)
+          pay(this.$store.state.amountValue, this.$store.state.emailValue, isRecurrent)
         }
       },
-      // isFormValid() {
-      //   return this.isNameValid && this.isEmailValid && this.isAmountValid
-      //     ? this.isBtnActive = true : this.isBtnActive = false
-      // }
-    },
-    watch: {
-      nameValue() {
-        // console.log( this.$store.state.nameValue)
-        // this.name.length >= 3 && this.name.length < 60
-        //   // ? this.isNameValid = true : this.isNameValid = false
-        // ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
-        // this.isFormValid()
+      isFormValid() {
+        this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
+          ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
       },
-      emailValue() {
-        // this.$store.commit('emailValid', this.isMailValid(this.email))
-        // this.isFormValid()
-      },
-      amountValue() {
-        // store.commit('amountValue')
-
-        // this.amountValue >= 50 ? this.isAmountValid = true : this.isAmountValid = false
-        // this.isFormValid()
-      },
-      // recurrentPicked() {
-      //   console.log(this.recurrentPicked)
-      // },
-      // isEmailSubscription() {
-      //   console.log('mail ', this.isEmailSubscription)
-      // }
     },
     mounted() {
       const paymentScript = document.createElement('script')
