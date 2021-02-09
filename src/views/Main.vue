@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <Content />
+<!--    <Content />-->
     <Form />
   </div>
 </template>

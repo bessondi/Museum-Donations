@@ -11,22 +11,22 @@
     <form @submit.prevent="getPay" class="form">
       <div class="field">
         <label for="name"><strong>*Ваше имя:</strong></label>
-        <input v-model.trim="nameValue"
-               :class="isNameValid === null ? '' : isNameValid ? 'valid' : 'invalid'"
+        <input v-model.trim="name"
+               :class="$store.state.isNameValid === null ? '' : $store.state.isNameValid ? 'valid' : 'invalid'"
                class="textField" type="text" id="name" name="name" placeholder="Карл Фаберже"
                required>
       </div>
       <div class="field">
         <label for="email"><strong>*Email:</strong></label>
-        <input v-model.trim="emailValue"
-               :class="isEmailValid === null ? '' : isEmailValid ? 'valid' : 'invalid'"
+        <input v-model.trim="email"
+               :class="$store.state.isEmailValid === null ? '' : $store.state.isEmailValid ? 'valid' : 'invalid'"
                class="textField" type="email" id="email" name="email" placeholder="faberge@museum.ru"
                required>
       </div>
 
       <!-- agreements -->
       <div class="field">
-        <input v-model="isOfferAgreement" type="checkbox" id="offerAgreement" name="offerAgreement">
+        <input v-model="offerAgreement" type="checkbox" id="offerAgreement" name="offerAgreement">
         <label class="agreement" for="offerAgreement"><strong> Согласен(-на) с условиями
           <router-link to="/offer"> оферты</router-link>
         </strong>
@@ -39,46 +39,50 @@
       </div>
 
       <!-- subscription or single payment -->
-      <div v-if="isOfferAgreement" class="field recurrent">
-        <input v-model="recurrentPicked" type="radio" id="firstType" class="hidden" name="recurrent" value="single">
-        <label :class="recurrentPicked === 'single' ? 'checked' : null" for="firstType"
+      <div v-if="offerAgreement" class="field recurrent">
+        <input v-model="recurrent" type="radio" id="firstType" class="hidden" name="recurrent" value="single">
+        <label :class="$store.state.recurrentPicked === 'single' ? 'checked' : null" for="firstType"
                class="btn">Единовременно</label>
-        <input v-model="recurrentPicked" type="radio" id="secondType" class="hidden" name="recurrent" value="monthly">
-        <label :class="recurrentPicked === 'monthly' ? 'checked' : null" for="secondType"
+        <input v-model="recurrent" type="radio" id="secondType" class="hidden" name="recurrent" value="monthly">
+        <label :class="$store.state.recurrentPicked === 'monthly' ? 'checked' : null" for="secondType"
                class="btn">Ежемесячно</label>
       </div>
 
       <!-- sum -->
-      <div v-if="isOfferAgreement" class="field amount">
-        <input @click="getAmount(50)" type="radio" id="firstAmount" class="hidden" name="amount">
-        <label :class="amountValue === 50 ? 'checked' : null" for="firstAmount" class="btn btnAmountTitle">50
+      <div v-if="offerAgreement" class="field amount">
+        <input @click="setAmount(50)" type="radio" id="firstAmount" class="hidden" name="amount">
+        <label :class="$store.state.amountValue === 50 ? 'checked' : null" for="firstAmount" class="btn btnAmountTitle">50
           ₽</label>
 
-        <input @click="getAmount(100)" type="radio" id="secondAmount" class="hidden" name="amount">
-        <label :class="amountValue === 100 ? 'checked' : null" for="secondAmount" class="btn btnAmountTitle">100
+        <input @click="setAmount(100)" type="radio" id="secondAmount" class="hidden" name="amount">
+        <label :class="$store.state.amountValue === 100 ? 'checked' : null" for="secondAmount"
+               class="btn btnAmountTitle">100
           ₽</label>
 
-        <input @click="getAmount(1000)" type="radio" id="thirdAmount" class="hidden" name="amount">
-        <label :class="amountValue === 1000 ? 'checked' : null" for="thirdAmount" class="btn btnAmountTitle">1000
+        <input @click="setAmount(1000)" type="radio" id="thirdAmount" class="hidden" name="amount">
+        <label :class="$store.state.amountValue === 1000 ? 'checked' : null" for="thirdAmount"
+               class="btn btnAmountTitle">1000
           ₽</label>
 
-        <input @click="getAmount('other')" type="radio" id="otherAmount" class="hidden" name="amount">
-        <label :class="isAmountFieldVisible ? 'checked' : null" for="otherAmount" class="btn btnAmountTitle">Другая
-          сумма</label>
+        <input @click="setAmount('other')" type="radio" id="otherAmount" class="hidden" name="amount">
+        <label :class="$store.state.isAmountFieldVisible ? 'checked' : null"
+               for="otherAmount" class="btn btnAmountTitle">Другая сумма</label>
       </div>
 
       <!-- sum field -->
-      <div v-if="isOfferAgreement && isAmountFieldVisible" for="otherAmount" class="field otherAmount">
+      <div v-if="offerAgreement && $store.state.isAmountFieldVisible" for="otherAmount" class="field otherAmount">
         <label for="donationSum">Введите сумму пожертвования:</label>
-        <input v-model.number="amountValue" class="textField" type="number" id="donationSum" name="sum"
+        <input v-model.number="amountSum" class="textField" type="number" id="donationSum" name="sum"
                placeholder="Минимальная сумма 50 рублей">
       </div>
 
       <!-- btn -->
       <div class="field">
-        <input :class="isNameValid && isEmailValid && isOfferAgreement && isBtnActive? 'active' : ''"
-               class="submitBtn" id="submit" type="submit"
-               :value="`Пожертвовать ${amountValue ? amountValue+' руб.' : ''}`">
+        <input class="submitBtn" id="submit" type="submit"
+          :class="$store.state.isNameValid && $store.state.isEmailValid
+          && $store.state.isOfferAgreement && $store.state.isBtnActive
+            ? 'active' : ''"
+          :value="`Пожертвовать ${ $store.state.amountValue ? $store.state.amountValue + ' руб.' : ''}`">
       </div>
       <div class="paymentLogos">
         <img v-for="icon in paymentIcons" class="logo" :src="icon.logo" :alt="icon.alt">
@@ -93,7 +97,6 @@
   import payIcon3 from '@/assets/svg/logo-visa.svg'
   import payIcon4 from '@/assets/svg/logo-mastercard.svg'
   import payIcon5 from '@/assets/svg/logo-mir.svg'
-  import store from '../store'
 
   let routeTo
   const changeRouter = function (ctx) {
@@ -156,23 +159,84 @@
           {logo: payIcon3, alt: 'VISA'},
           {logo: payIcon5, alt: 'МИР'}
         ],
-
-        nameValue: '',
-        emailValue: '',
-        isNameValid: null,
-        isEmailValid: null,
-        isAmountValid: null,
-
-        recurrentPicked: 'single',
-        isOfferAgreement: false,
-        isEmailSubscription: false,
-        isAmountFieldVisible: false,
-        amountValue: 0,
-
-        isBtnActive: false
       }
     },
+    computed: {
+      name: {
+        get() {
+          return this.$store.state.nameValue
+        },
+        set(value) {
+          this.$store.commit('updateName', value)
+          this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length < 60 ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
+          // console.log(this.$store.state.isNameValid)
+          // this.isFormValid()
+        }
+      },
+      email: {
+        get() {
+          return this.$store.state.emailValue
+        },
+        set(value) {
+          this.$store.commit('updateEmail', value)
+          this.$store.commit('emailValid', this.isMailValid(this.email))
+          // this.isFormValid()
+        }
+      },
+      offerAgreement: {
+        get() {
+          return this.$store.state.isOfferAgreement
+        },
+        set(value) {
+          this.$store.commit('updateOfferAgreement', value)
+          // this.isFormValid()
+        }
+      },
+      recurrent: {
+        get() {
+          return this.$store.state.recurrentPicked
+        },
+        set(value) {
+          this.$store.commit('updateRecurrent', value)
+        }
+      },
+      amountSum: {
+        get() {
+          return this.$store.state.amountValue
+        },
+        set(value) {
+          this.$store.commit('updateAmount', value)
+          // this.isFormValid()
+        }
+      },
+      isFormValid: {
+        get() {
+          this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
+            ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
+
+          return this.$store.state.isBtnActive
+        },
+        // set(value) {
+        // }
+      },
+
+      // emailValid: {
+      //   get() {
+      //     return this.$store.state.amountValue
+      //   },
+      //   set(value) {
+      //     this.$store.commit('updateAmount', value)
+      //   }
+      // },
+
+    },
     methods: {
+      setAmount(value) {
+        this.$store.commit('addAmount', value)
+        // this.isFormValid()
+      },
+
+
       isMailValid(value) {
         const mailPattern = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{2,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,5}|[0-9]{1,3})(\]?)$/
         if (value.length === 0 || value.toLowerCase().match(mailPattern) === null) {
@@ -180,22 +244,22 @@
         }
         return true
       },
-      getAmount(num) {
-        if (typeof num === 'number') {
-          this.amountValue = num
-          this.isAmountFieldVisible = false
-        } else if (num === 'other') {
-          this.amountValue = ''
-          this.isAmountFieldVisible = true
-        }
-      },
+      // getAmount(num) {
+      //   if (typeof num === 'number') {
+      //     this.amountValue = num
+      //     this.isAmountFieldVisible = false
+      //   } else if (num === 'other') {
+      //     this.amountValue = ''
+      //     this.isAmountFieldVisible = true
+      //   }
+      // },
       getPay() {
         if (
           this.nameValue !== ''
-          && this.isMailValid(this.emailValue)
-          && this.isOfferAgreement
-          && this.amountValue >= 50
-          && this.isBtnActive
+          && this.$store.state.isEmailValid
+          && this.$store.state.isOfferAgreement
+          && this.$store.state.amountValue >= 50
+          && this.$store.state.isBtnActive
         ) {
           const isRecurrent = this.recurrentPicked === 'single' ? false : this.recurrentPicked === 'monthly' ? true : null
 
@@ -203,24 +267,28 @@
           pay(this.amountValue, this.emailValue, isRecurrent)
         }
       },
-      isFormValid() {
-        return this.isNameValid && this.isEmailValid && this.isAmountValid
-          ? this.isBtnActive = true : this.isBtnActive = false
-      }
+      // isFormValid() {
+      //   return this.isNameValid && this.isEmailValid && this.isAmountValid
+      //     ? this.isBtnActive = true : this.isBtnActive = false
+      // }
     },
     watch: {
       nameValue() {
-        this.nameValue.length >= 3 && this.nameValue.length < 60
-          ? this.isNameValid = true : this.isNameValid = false
-        this.isFormValid()
+        // console.log( this.$store.state.nameValue)
+        // this.name.length >= 3 && this.name.length < 60
+        //   // ? this.isNameValid = true : this.isNameValid = false
+        // ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
+        // this.isFormValid()
       },
       emailValue() {
-        this.isEmailValid = this.isMailValid(this.emailValue)
-        this.isFormValid()
+        // this.$store.commit('emailValid', this.isMailValid(this.email))
+        // this.isFormValid()
       },
       amountValue() {
-        this.amountValue >= 50 ? this.isAmountValid = true : this.isAmountValid = false
-        this.isFormValid()
+        // store.commit('amountValue')
+
+        // this.amountValue >= 50 ? this.isAmountValid = true : this.isAmountValid = false
+        // this.isFormValid()
       },
       // recurrentPicked() {
       //   console.log(this.recurrentPicked)
