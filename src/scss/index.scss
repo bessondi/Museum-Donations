@@ -28,6 +28,10 @@ a {
   display: flex;
   justify-content: center;
 
+  @media screen and (min-width: $tabletWidth) {
+    background: $activeOptionBtn;
+  }
+
   @import "content";
   @import "donation";
 }

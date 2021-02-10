@@ -70,7 +70,7 @@
       </div>
 
       <!-- sum field -->
-      <div v-if="offerAgreement && $store.state.isAmountFieldVisible" for="otherAmount" class="field otherAmount">
+      <div v-if="offerAgreement && $store.state.isAmountFieldVisible" class="field otherAmount">
         <label for="donationSum">Введите сумму пожертвования:</label>
         <input v-model.number="amountSum" class="textField" type="number" id="donationSum" name="sum"
                placeholder="Минимальная сумма 50 рублей">
@@ -85,169 +85,190 @@
                :value="`Пожертвовать ${ $store.state.amountValue ? $store.state.amountValue + ' руб.' : ''}`">
       </div>
       <div class="paymentLogos">
-        <img v-for="icon in paymentIcons" class="logo" :src="icon.logo" :alt="icon.alt">
+        <img v-for="icon in paymentIcons" :key="icon.id" class="logo" :src="icon.logo" :alt="icon.alt">
       </div>
     </form>
   </div>
 </template>
 
 <script>
-  import payIcon1 from '@/assets/svg/apple-pay.svg'
-  import payIcon2 from '@/assets/svg/g-pay.svg'
-  import payIcon3 from '@/assets/svg/logo-visa.svg'
-  import payIcon4 from '@/assets/svg/logo-mastercard.svg'
-  import payIcon5 from '@/assets/svg/logo-mir.svg'
+import payIcon1 from '@/assets/svg/apple-pay.svg'
+import payIcon2 from '@/assets/svg/g-pay.svg'
+import payIcon3 from '@/assets/svg/logo-visa.svg'
+import payIcon4 from '@/assets/svg/logo-mastercard.svg'
+import payIcon5 from '@/assets/svg/logo-mir.svg'
 
-  let routeTo
-  const changeRouter = function (ctx) {
-    routeTo = function (path) {
-      ctx.$router.push(path)
-    }
+let routeTo
+const changeRouter = function (ctx) {
+  routeTo = function (path) {
+    ctx.$router.push(path)
   }
+}
 
-  function pay(amount, email, recurrent) {
-    const widget = new cp.CloudPayments();
+function pay (amount, email, recurrent) {
+  // eslint-disable-next-line no-undef
+  const widget = new cp.CloudPayments()
 
-    //создание ежемесячной подписки
-    const data = {};
-    if (recurrent) {
-      data.cloudPayments = {
-        recurrent: {
-          interval: 'Month',
-          period: 1,
-          amount
-        }
-      }
-    }
-
-    const apiKey = 'pk_5dd54d4b5d9a17e641da689238624';
-
-    widget.pay('auth', // или 'charge'
-      { //options
-        publicId: apiKey, //id из личного кабинета
-        description: `Пожертвование Музею Фаберже в сумме ${amount} рублей`, //назначение
-        amount: amount, //сумма
-        currency: 'RUB', //валюта,
-        email: email,
-        requireEmail: true, // mail в форме оплаты
-        invoiceId: '', //номер заказа  (необязательно)
-        accountId: email, //идентификатор плательщика (необязательно) mail
-        skin: "mini", //дизайн виджета (необязательно)
-        data: data
-      },
-      {
-        onSuccess: function (options) { // 2 - success - действие при успешной оплате
-          routeTo('/gratitude')
-        },
-        onFail: function (reason, options) { // fail - действие при неуспешной оплате
-          // routeTo('/')
-        },
-        onComplete: function (paymentResult, options) {
-          // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
-        }
-      }
-    )
-  };
-
-  export default {
-    data() {
-      return {
-        paymentIcons: [
-          {logo: payIcon1, alt: 'Apple pay'},
-          {logo: payIcon2, alt: 'Google pay'},
-          {logo: payIcon4, alt: 'MasterCard'},
-          {logo: payIcon3, alt: 'VISA'},
-          {logo: payIcon5, alt: 'МИР'}
-        ],
-      }
-    },
-    computed: {
-      name: {
-        get() {
-          return this.$store.state.nameValue
-        },
-        set(value) {
-          this.$store.commit('updateName', value)
-          this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length < 60
-            ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
-          this.isFormValid()
-        }
-      },
-      email: {
-        get() {
-          return this.$store.state.emailValue
-        },
-        set(value) {
-          this.$store.commit('updateEmail', value)
-          this.$store.commit('emailValid', this.isMailValid(this.email))
-          this.isFormValid()
-        }
-      },
-      offerAgreement: {
-        get() {
-          return this.$store.state.isOfferAgreement
-        },
-        set(value) {
-          this.$store.commit('updateOfferAgreement', value)
-          this.isFormValid()
-        }
-      },
+  // создание ежемесячной подписки
+  const data = {}
+  if (recurrent) {
+    data.cloudPayments = {
       recurrent: {
-        get() {
-          return this.$store.state.recurrentPicked
-        },
-        set(value) {
-          this.$store.commit('updateRecurrent', value)
-        }
-      },
-      amountSum: {
-        get() {
-          return this.$store.state.amountValue
-        },
-        set(value) {
-          this.$store.commit('updateAmount', value)
-          this.isFormValid()
-        }
-      },
-    },
-    methods: {
-      setAmount(value) {
-        this.$store.commit('addAmount', value)
-        this.isFormValid()
-      },
-      isMailValid(value) {
-        const mailPattern = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{2,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,5}|[0-9]{1,3})(\]?)$/
-        if (value.length === 0 || value.toLowerCase().match(mailPattern) === null) {
-          return false
-        }
-        return true
-      },
-      getPay() {
-        if (
-          this.nameValue !== ''
-          && this.$store.state.isEmailValid
-          && this.$store.state.isOfferAgreement
-          && this.$store.state.amountValue >= 50
-          && this.$store.state.isBtnActive
-        ) {
-          const isRecurrent = this.$store.state.recurrentPicked === 'single'
-            ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
-
-          changeRouter(this)
-          pay(this.$store.state.amountValue, this.$store.state.emailValue, isRecurrent)
-        }
-      },
-      isFormValid() {
-        this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
-          ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
-      },
-    },
-    mounted() {
-      const paymentScript = document.createElement('script')
-      paymentScript.setAttribute('src', 'https://widget.cloudpayments.ru/bundles/cloudpayments')
-      document.head.appendChild(paymentScript)
+        interval: 'Month',
+        period: 1,
+        amount
+      }
     }
   }
+
+  const apiKey = 'pk_5dd54d4b5d9a17e641da689238624'
+
+  widget.pay('auth', // или 'charge'
+    { // options
+      publicId: apiKey, // id из личного кабинета
+      description: `Пожертвование Музею Фаберже в сумме ${amount} рублей`, // назначение
+      amount: amount, // сумма
+      currency: 'RUB', // валюта,
+      email: email,
+      requireEmail: true, // mail в форме оплаты
+      invoiceId: '', // номер заказа  (необязательно)
+      accountId: email, // идентификатор плательщика (необязательно) mail
+      skin: 'mini', // дизайн виджета (необязательно)
+      data: data
+    },
+    {
+      onSuccess: function (options) { // 2 - success - действие при успешной оплате
+        routeTo('/gratitude')
+      },
+      onFail: function (reason, options) { // fail - действие при неуспешной оплате
+        // routeTo('/')
+      },
+      onComplete: function (paymentResult, options) {
+        // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
+      }
+    }
+  )
+}
+
+export default {
+  data () {
+    return {
+      paymentIcons: [
+        {
+          id: 1,
+          logo: payIcon1,
+          alt: 'Apple pay'
+        },
+        {
+          id: 2,
+          logo: payIcon2,
+          alt: 'Google pay'
+        },
+        {
+          id: 3,
+          logo: payIcon4,
+          alt: 'MasterCard'
+        },
+        {
+          id: 4,
+          logo: payIcon3,
+          alt: 'VISA'
+        },
+        {
+          id: 5,
+          logo: payIcon5,
+          alt: 'МИР'
+        }
+      ]
+    }
+  },
+  computed: {
+    name: {
+      get () {
+        return this.$store.state.nameValue
+      },
+      set (value) {
+        this.$store.commit('updateName', value)
+        this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length < 60
+          ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
+        this.isFormValid()
+      }
+    },
+    email: {
+      get () {
+        return this.$store.state.emailValue
+      },
+      set (value) {
+        this.$store.commit('updateEmail', value)
+        this.$store.commit('emailValid', this.isMailValid(this.email))
+        this.isFormValid()
+      }
+    },
+    offerAgreement: {
+      get () {
+        return this.$store.state.isOfferAgreement
+      },
+      set (value) {
+        this.$store.commit('updateOfferAgreement', value)
+        this.isFormValid()
+      }
+    },
+    recurrent: {
+      get () {
+        return this.$store.state.recurrentPicked
+      },
+      set (value) {
+        this.$store.commit('updateRecurrent', value)
+      }
+    },
+    amountSum: {
+      get () {
+        return this.$store.state.amountValue
+      },
+      set (value) {
+        this.$store.commit('updateAmount', value)
+        this.isFormValid()
+      }
+    }
+  },
+  methods: {
+    setAmount (value) {
+      this.$store.commit('addAmount', value)
+      this.isFormValid()
+    },
+    isMailValid (value) {
+      const mailPattern = /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{2,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{2,5}|[0-9]{1,3})(\]?)$/
+      if (value.length === 0 || value.toLowerCase().match(mailPattern) === null) {
+        return false
+      }
+      return true
+    },
+    getPay () {
+      if (
+        this.nameValue !== '' &&
+        this.$store.state.isEmailValid &&
+        this.$store.state.isOfferAgreement &&
+        this.$store.state.amountValue >= 50 &&
+        this.$store.state.isBtnActive
+      ) {
+        const isRecurrent = this.$store.state.recurrentPicked === 'single'
+          ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
+
+        changeRouter(this)
+        pay(this.$store.state.amountValue, this.$store.state.emailValue, isRecurrent)
+      }
+    },
+    isFormValid () {
+      this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
+        ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
+    }
+  },
+  mounted () {
+    const paymentScript = document.createElement('script')
+    paymentScript.setAttribute('src', 'https://widget.cloudpayments.ru/bundles/cloudpayments')
+    document.head.appendChild(paymentScript)
+  }
+}
 </script>
 
 
