@@ -10,7 +10,6 @@ import Content from '@/components/Content.vue'
 import Form from '@/components/Donation.vue'
 
 export default {
-  // name: 'Main',
   components: {
     Content,
     Form
@@ -19,5 +18,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../scss/index.scss';
+@import '@/scss/index.scss';
 </style>

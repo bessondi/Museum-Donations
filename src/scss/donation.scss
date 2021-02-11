@@ -6,6 +6,20 @@
   background-color: $formBackground;
   padding: 20px 50px;
   box-sizing: border-box;
+  //position: relative;
+
+  .locale {
+    position: absolute;
+    top: 20px;
+    right: 50px;
+    outline: none;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: $btnRadius;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
 
   .title {
     margin: 2.5em 0;

@@ -1,11 +1,10 @@
 <template>
   <div class="donation">
+    <button @click="changeLang" class="locale">{{ $locale('form.changeLangBtn') }}</button>
+
     <div class="title">
-      <h1 class="heading">Пожертвование Музею Фаберже</h1>
-      <p class="description">Музей Фаберже в Санкт-Петербурге и НО «Культурно-Исторический Фонд «Связь времен»»
-        приглашает Вас поддержать Музей, осуществив пожертвование на счет Фонда на его уставную деятельность.</p>
-      <p>Ваше участие станет значимой помощью в деле поддержки нашего Музея, которая позволит ему в полной мере
-        выполнять свои основные задачи: собирать, изучать и популяризировать русское искусство!</p>
+      <h1 class="heading">{{ $locale('form.heading') }}</h1>
+      <p class="description">{{ $locale('form.description') }}</p>
     </div>
 
     <form @submit.prevent="getPay" class="form">
@@ -91,6 +90,7 @@
   </div>
 </template>
 
+<!-- TODO: transfer form handle to $root component -->
 <script>
 import payIcon1 from '@/assets/svg/apple-pay.svg'
 import payIcon2 from '@/assets/svg/g-pay.svg'
@@ -105,7 +105,7 @@ const changeRouter = function (ctx) {
   }
 }
 
-function pay (amount, email, recurrent) {
+function pay (amount, email, recurrent, currency) {
   // eslint-disable-next-line no-undef
   const widget = new cp.CloudPayments()
 
@@ -151,6 +151,7 @@ function pay (amount, email, recurrent) {
 }
 
 export default {
+  inject: ['changeLocale'],
   data () {
     return {
       paymentIcons: [
@@ -183,6 +184,11 @@ export default {
     }
   },
   computed: {
+    currency: {
+      get () {
+        return this.$store.state.currency
+      }
+    },
     name: {
       get () {
         return this.$store.state.nameValue
@@ -255,12 +261,28 @@ export default {
           ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
 
         changeRouter(this)
-        pay(this.$store.state.amountValue, this.$store.state.emailValue, isRecurrent)
+        pay(this.amountSum, this.email, isRecurrent, this.currency)
       }
     },
     isFormValid () {
       this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
         ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
+    },
+
+    changeLang() {
+      this.$store.state.locale === 'ru'
+        ? this.$store.commit('changeLoc', 'en')
+        :  this.$store.commit('changeLoc', 'ru')
+
+      this.changeCurr()
+
+      this.changeLocale(this.$store.state.locale)
+      this.$forceUpdate()
+    },
+    changeCurr() {
+      this.$store.state.locale === 'ru'
+        ? this.$store.commit('changeCurrency', 'RUB')
+        : this.$store.commit('changeCurrency', 'EUR')
     }
   },
   mounted () {
@@ -270,10 +292,3 @@ export default {
   }
 }
 </script>
-
-
-
-
-
-
-
