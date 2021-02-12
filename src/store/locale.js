@@ -6,7 +6,7 @@ export default {
 
     app.config.globalProperties.$locale = key  => {
       return key.split('.').reduce((words, k) => {
-        return words[k] || 'wrong'
+        return words[k] || 'wrongValue'
       }, options[currentLang])
     }
 

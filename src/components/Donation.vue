@@ -9,14 +9,14 @@
 
     <form @submit.prevent="getPay" class="form">
       <div class="field">
-        <label for="name"><strong>*Ваше имя:</strong></label>
+        <label for="name"><strong>*{{ $locale('form.nameLabel') }}:</strong></label>
         <input v-model.trim="name"
                :class="$store.state.isNameValid === null ? '' : $store.state.isNameValid ? 'valid' : 'invalid'"
-               class="textField" type="text" id="name" name="name" placeholder="Карл Фаберже"
+               class="textField" type="text" id="name" name="name" :placeholder="$locale('form.namePlaceholder')"
                required>
       </div>
       <div class="field">
-        <label for="email"><strong>*Email:</strong></label>
+        <label for="email"><strong>*{{ $locale('form.mailLabel') }}:</strong></label>
         <input v-model.trim="email"
                :class="$store.state.isEmailValid === null ? '' : $store.state.isEmailValid ? 'valid' : 'invalid'"
                class="textField" type="email" id="email" name="email" placeholder="faberge@museum.ru"
@@ -26,12 +26,15 @@
       <!-- agreements -->
       <div class="field">
         <input v-model="offerAgreement" type="checkbox" id="offerAgreement" name="offerAgreement">
-        <label class="agreement" for="offerAgreement"><strong> Согласен(-на) с условиями
-          <router-link to="/offer"> оферты</router-link>
+        <label class="agreement" for="offerAgreement">
+          <strong>{{ $locale('form.offerAgreement') }}
+            <router-link to="/offer">
+              <button>*</button>
+            </router-link>
         </strong>
           <br>
-          <p>Обращаем Ваше внимание, что пожертвования через сайт Музея Фаберже принимаются только от
-            физических лиц.</p>
+          <br>
+          <small>{{ $locale('form.note') }}</small>
         </label>
         <!--        <input v-model="isEmailSubscription" type="checkbox" id="emailSubscription" name="emailSubscription">-->
         <!--        <label class="agreement" for="emailSubscription"> Хочу получать письма на эл.почту</label>-->
@@ -41,38 +44,38 @@
       <div v-if="offerAgreement" class="field recurrent">
         <input v-model="recurrent" type="radio" id="firstType" class="hidden" name="recurrent" value="single">
         <label :class="$store.state.recurrentPicked === 'single' ? 'checked' : null" for="firstType"
-               class="btn">Единовременно</label>
+               class="btn">{{ $locale('form.recurrentOnce') }}</label>
         <input v-model="recurrent" type="radio" id="secondType" class="hidden" name="recurrent" value="monthly">
         <label :class="$store.state.recurrentPicked === 'monthly' ? 'checked' : null" for="secondType"
-               class="btn">Ежемесячно</label>
+               class="btn">{{ $locale('form.recurrentMonthly') }}</label>
       </div>
 
       <!-- sum -->
       <div v-if="offerAgreement" class="field amount">
         <input @click="setAmount(50)" type="radio" id="firstAmount" class="hidden" name="amount">
         <label :class="$store.state.amountValue === 50 ? 'checked' : null" for="firstAmount" class="btn btnAmountTitle">50
-          ₽</label>
+          {{ $locale('form.currency') }}</label>
 
         <input @click="setAmount(100)" type="radio" id="secondAmount" class="hidden" name="amount">
         <label :class="$store.state.amountValue === 100 ? 'checked' : null" for="secondAmount"
                class="btn btnAmountTitle">100
-          ₽</label>
+          {{ $locale('form.currency') }}</label>
 
         <input @click="setAmount(1000)" type="radio" id="thirdAmount" class="hidden" name="amount">
         <label :class="$store.state.amountValue === 1000 ? 'checked' : null" for="thirdAmount"
                class="btn btnAmountTitle">1000
-          ₽</label>
+          {{ $locale('form.currency') }}</label>
 
         <input @click="setAmount('other')" type="radio" id="otherAmount" class="hidden" name="amount">
         <label :class="$store.state.isAmountFieldVisible ? 'checked' : null"
-               for="otherAmount" class="btn btnAmountTitle">Другая сумма</label>
+               for="otherAmount" class="btn btnAmountTitle">{{ $locale('form.otherAmount') }}</label>
       </div>
 
       <!-- sum field -->
       <div v-if="offerAgreement && $store.state.isAmountFieldVisible" class="field otherAmount">
         <label for="donationSum">Введите сумму пожертвования:</label>
         <input v-model.number="amountSum" class="textField" type="number" id="donationSum" name="sum"
-               placeholder="Минимальная сумма 50 рублей">
+               :placeholder="$locale('form.amountPlaceholder')">
       </div>
 
       <!-- btn -->
@@ -81,7 +84,7 @@
                :class="$store.state.isNameValid && $store.state.isEmailValid
           && $store.state.isOfferAgreement && $store.state.isBtnActive
             ? 'active' : ''"
-               :value="`Пожертвовать ${ $store.state.amountValue ? $store.state.amountValue + ' руб.' : ''}`">
+               :value="`${$locale('form.submitBtn')} ${ $store.state.amountValue ? $store.state.amountValue + $locale('form.currency') : ''}`">
       </div>
       <div class="paymentLogos">
         <img v-for="icon in paymentIcons" :key="icon.id" class="logo" :src="icon.logo" :alt="icon.alt">
@@ -90,7 +93,9 @@
   </div>
 </template>
 
+<!-- TODO: add min 5 euro to EN value -->
 <!-- TODO: transfer form handle to $root component -->
+
 <script>
 import payIcon1 from '@/assets/svg/apple-pay.svg'
 import payIcon2 from '@/assets/svg/g-pay.svg'
@@ -195,7 +200,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateName', value)
-        this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length < 60
+        this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length <= 15
           ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
         this.isFormValid()
       }
