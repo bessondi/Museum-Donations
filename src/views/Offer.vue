@@ -1,8 +1,10 @@
 <template>
   <div class="offer">
     <router-link to="/" class="btn back">
-      <button>Вернуться назад</button>
+      <button>{{ $locale('form.backBtn') }}</button>
     </router-link>
+
+<!--    {{ $locale('form.offerText') }}-->
 
     <h1 class="heading">Текст договора оферты</h1>
     <p class="description">

@@ -73,9 +73,9 @@ export default createStore({
 
 export const ru = {
   form: {
-    changeLangBtn: 'GB',
+    changeLangBtn: 'en',
     heading: 'Пожертвование Музею Фаберже',
-    description: 'Музей Фаберже в Санкт-Петербурге и НО «Культурно-Исторический Фонд «Связь времен»» приглашает Вас поддержать Музей, осуществив пожертвование на счет Фонда на его уставную деятельность. Ваше участие станет значимой помощью в деле поддержки нашего Музея, которая позволит ему в полной мере выполнять свои основные задачи: собирать, изучать и популяризировать русское искусство!',
+    description: 'Музей Фаберже в Санкт-Петербурге и НО «Культурно-Исторический Фонд «Связь времен» приглашает Вас поддержать Музей, осуществив пожертвование на счет Фонда на его уставную деятельность. Ваше участие станет значимой помощью в деле поддержки нашего Музея, которая позволит ему в полной мере выполнять свои основные задачи: собирать, изучать и популяризировать русское искусство!',
     nameLabel: 'Ваше имя',
     namePlaceholder: 'Карл Фаберже',
     mailLabel: 'Email',
@@ -86,15 +86,18 @@ export const ru = {
     otherAmount: 'Другая сумма',
     amountPlaceholder: 'Минимальная сумма 50 рублей',
     submitBtn: 'Пожертвовать',
-    currency: ' ₽'
+    currency: ' ₽',
+
+    backBtn: 'Вернуться назад',
+    offerText: 'Текст Договора - оферты'
   }
 }
 
 export const en = {
   form: {
-    changeLangBtn: 'RU',
+    changeLangBtn: 'ru',
     heading: 'Donations for Fabergé Museum',
-    description: 'The Fabergé Museum in St. Petersburg and the Cultural and Historical Foundation “Link of Times” invites you to support the Museum by making a donation to the Foundation\'s account for its statutory activities. Your participation will be a significant help in supporting our Museum, which will allow it to fully fulfill its main tasks: to collect, study and popularize Russian art!',
+    description: 'The Fabergé Museum in St. Petersburg and the Cultural and Historical Foundation «Link of Times» invites you to support the Museum by making a donation to the Foundation\'s account for its statutory activities. Your participation will be a significant help in supporting our Museum, which will allow it to fully fulfill its main tasks: to collect, study and popularize Russian art!',
     nameLabel: 'Your name',
     namePlaceholder: 'Carl Fabergé',
     mailLabel: 'Email',
@@ -105,6 +108,9 @@ export const en = {
     otherAmount: 'Other Amount',
     amountPlaceholder: 'Minimum amount 5 euro',
     submitBtn: 'Donate',
-    currency: ' €'
+    currency: ' €',
+
+    backBtn: 'Back to donation',
+    offerText: 'Offer Text'
   }
 }
