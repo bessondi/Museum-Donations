@@ -1,15 +1,39 @@
 .donation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   min-width: 350px;
   max-width: 600px;
   min-height: 100vh;
   background-color: $formBackground;
-  padding: 20px 50px;
+  padding: 30px 50px;
   box-sizing: border-box;
 
-  .title {
-    margin: 2.5em 0;
+  .donation__header {
+    display: inherit;
+    justify-content: space-between;
 
+    .icon {
+      top: 20px;
+      right: 50px;
+      outline: none;
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: $btnRadius;
+      opacity: 1;
+
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .donation__title {
     .heading {
       font-family: 'PlayfairDisplay', serif;
       text-align: center;
@@ -17,9 +41,9 @@
     }
   }
 
-  .form {
+  .donation__form {
 
-    .field {
+    .donation__form__field {
       margin-top: 20px;
 
       & > label {
@@ -78,12 +102,26 @@
         cursor: pointer;
       }
 
+      .agreement {
+        & .logo {
+          width: 16px;
+          height: 16px;
+          margin-top: 5px;
+          margin-left: 8px;
+          cursor: pointer;
+          opacity: 1;
+
+          &:hover {
+            opacity: 0.6;
+          }
+        }
+      }
+
       .btn {
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
-        font-weight: bold;
         padding: 15px 20px;
         margin-right: 10px;
         background: $optionBtn;
@@ -122,6 +160,7 @@
       color: $formBackground;
       margin-top: 20px;
       transition: .4s ease;
+      cursor: not-allowed;
 
       &.active {
         background-color: $validPaymentBtn;
@@ -140,7 +179,7 @@
       justify-content: space-around;
       max-width: 450px;
       width: 100%;
-      margin: 20px auto 40px;
+      margin: 20px auto;
 
       .logo {
         height: 25px;
@@ -152,7 +191,7 @@
       }
     }
 
-    .hidden {
+    .donation__form_hidden {
       display: none;
     }
   }

@@ -1,23 +1,32 @@
 <template>
   <div class="donation">
-    <div class="title">
-      <h1 class="heading">Пожертвование Музею Фаберже</h1>
-      <p class="description">Музей Фаберже в Санкт-Петербурге и НО «Культурно-Исторический Фонд «Связь времен»»
-        приглашает Вас поддержать Музей, осуществив пожертвование на счет Фонда на его уставную деятельность.</p>
-      <p>Ваше участие станет значимой помощью в деле поддержки нашего Музея, которая позволит ему в полной мере
-        выполнять свои основные задачи: собирать, изучать и популяризировать русское искусство!</p>
+    <div class="donation__header">
+      <a href="https://fabergemuseum.ru/" class="icon">
+        <img class="logo" :src="backIcon" alt="back to main page">
+      </a>
+
+      <button @click="changeLang" class="icon">
+        <img class="logo"
+             :src="$locale('form.changeLangBtn') === 'ru'
+              ? languageIcons.ru : languageIcons.en" alt="language">
+      </button>
     </div>
 
-    <form @submit.prevent="getPay" class="form">
-      <div class="field">
-        <label for="name"><strong>*Ваше имя:</strong></label>
+    <div class="donation__title">
+      <h1 class="heading">{{ $locale('form.heading') }}</h1>
+      <p class="description">{{ $locale('form.description') }}</p>
+    </div>
+
+    <form @submit.prevent="getPay" class="donation__form">
+      <div class="donation__form__field">
+        <label for="name"><strong>*{{ $locale('form.nameLabel') }}:</strong></label>
         <input v-model.trim="name"
                :class="$store.state.isNameValid === null ? '' : $store.state.isNameValid ? 'valid' : 'invalid'"
-               class="textField" type="text" id="name" name="name" placeholder="Карл Фаберже"
+               class="textField" type="text" id="name" name="name" :placeholder="$locale('form.namePlaceholder')"
                required>
       </div>
-      <div class="field">
-        <label for="email"><strong>*Email:</strong></label>
+      <div class="donation__form__field">
+        <label for="email"><strong>*{{ $locale('form.mailLabel') }}:</strong></label>
         <input v-model.trim="email"
                :class="$store.state.isEmailValid === null ? '' : $store.state.isEmailValid ? 'valid' : 'invalid'"
                class="textField" type="email" id="email" name="email" placeholder="faberge@museum.ru"
@@ -25,234 +34,291 @@
       </div>
 
       <!-- agreements -->
-      <div class="field">
+      <div class="donation__form__field">
         <input v-model="offerAgreement" type="checkbox" id="offerAgreement" name="offerAgreement">
-        <label class="agreement" for="offerAgreement"><strong> Согласен(-на) с условиями
-          <router-link to="/offer"> оферты</router-link>
+        <label class="agreement" for="offerAgreement">
+          <strong>{{ $locale('form.offerAgreement') }}
+            <router-link to="/offer">
+              <img class="logo" :src="linkIcon" alt="offer">
+            </router-link>
         </strong>
           <br>
-          <p>Обращаем Ваше внимание, что пожертвования через сайт Музея Фаберже принимаются только от
-            физических лиц.</p>
+          <br>
+          <small>{{ $locale('form.note') }}</small>
         </label>
         <!--        <input v-model="isEmailSubscription" type="checkbox" id="emailSubscription" name="emailSubscription">-->
         <!--        <label class="agreement" for="emailSubscription"> Хочу получать письма на эл.почту</label>-->
       </div>
 
       <!-- subscription or single payment -->
-      <div v-if="offerAgreement" class="field recurrent">
-        <input v-model="recurrent" type="radio" id="firstType" class="hidden" name="recurrent" value="single">
+      <div v-if="offerAgreement" class="donation__form__field recurrent">
+        <input v-model="recurrent" type="radio" id="firstType" class="donation__form_hidden" name="recurrent" value="single">
         <label :class="$store.state.recurrentPicked === 'single' ? 'checked' : null" for="firstType"
-               class="btn">Единовременно</label>
-        <input v-model="recurrent" type="radio" id="secondType" class="hidden" name="recurrent" value="monthly">
+               class="btn">{{ $locale('form.recurrentOnce') }}</label>
+        <input v-model="recurrent" type="radio" id="secondType" class="donation__form_hidden" name="recurrent" value="monthly">
         <label :class="$store.state.recurrentPicked === 'monthly' ? 'checked' : null" for="secondType"
-               class="btn">Ежемесячно</label>
+               class="btn">{{ $locale('form.recurrentMonthly') }}</label>
       </div>
 
       <!-- sum -->
-      <div v-if="offerAgreement" class="field amount">
-        <input @click="setAmount(50)" type="radio" id="firstAmount" class="hidden" name="amount">
+      <div v-if="offerAgreement" class="donation__form__field amount">
+        <input @click="setAmount(50)" type="radio" id="firstAmount" class="donation__form_hidden" name="amount">
         <label :class="$store.state.amountValue === 50 ? 'checked' : null" for="firstAmount" class="btn btnAmountTitle">50
-          ₽</label>
+          {{ $locale('form.currency') }}</label>
 
-        <input @click="setAmount(100)" type="radio" id="secondAmount" class="hidden" name="amount">
+        <input @click="setAmount(100)" type="radio" id="secondAmount" class="donation__form_hidden" name="amount">
         <label :class="$store.state.amountValue === 100 ? 'checked' : null" for="secondAmount"
                class="btn btnAmountTitle">100
-          ₽</label>
+          {{ $locale('form.currency') }}</label>
 
-        <input @click="setAmount(1000)" type="radio" id="thirdAmount" class="hidden" name="amount">
+        <input @click="setAmount(1000)" type="radio" id="thirdAmount" class="donation__form_hidden" name="amount">
         <label :class="$store.state.amountValue === 1000 ? 'checked' : null" for="thirdAmount"
                class="btn btnAmountTitle">1000
-          ₽</label>
+          {{ $locale('form.currency') }}</label>
 
-        <input @click="setAmount('other')" type="radio" id="otherAmount" class="hidden" name="amount">
+        <input @click="setAmount('other')" type="radio" id="otherAmount" class="donation__form_hidden" name="amount">
         <label :class="$store.state.isAmountFieldVisible ? 'checked' : null"
-               for="otherAmount" class="btn btnAmountTitle">Другая сумма</label>
+               for="otherAmount" class="btn btnAmountTitle">
+          {{ $locale('form.otherAmount') }}
+        </label>
       </div>
 
       <!-- sum field -->
-      <div v-if="offerAgreement && $store.state.isAmountFieldVisible" for="otherAmount" class="field otherAmount">
+      <div v-if="offerAgreement && $store.state.isAmountFieldVisible" class="donation__form__field otherAmount">
         <label for="donationSum">Введите сумму пожертвования:</label>
         <input v-model.number="amountSum" class="textField" type="number" id="donationSum" name="sum"
-               placeholder="Минимальная сумма 50 рублей">
+               :placeholder="$locale('form.amountPlaceholder')">
       </div>
 
       <!-- btn -->
-      <div class="field">
+      <div class="donation__form__field">
         <input class="submitBtn" id="submit" type="submit"
                :class="$store.state.isNameValid && $store.state.isEmailValid
           && $store.state.isOfferAgreement && $store.state.isBtnActive
             ? 'active' : ''"
-               :value="`Пожертвовать ${ $store.state.amountValue ? $store.state.amountValue + ' руб.' : ''}`">
+               :value="`${$locale('form.submitBtn')} ${ $store.state.amountValue ? $store.state.amountValue + $locale('form.currency') : ''}`">
       </div>
       <div class="paymentLogos">
-        <img v-for="icon in paymentIcons" class="logo" :src="icon.logo" :alt="icon.alt">
+        <img v-for="icon in paymentIcons" :key="icon.id" class="logo" :src="icon.logo" :alt="icon.alt">
       </div>
     </form>
   </div>
 </template>
 
+<!-- TODO: add min 5 euro to EN value -->
+<!-- TODO: add currency to pay widget -->
+<!-- TODO: transfer form handle to $root component -->
+
 <script>
-  import payIcon1 from '@/assets/svg/apple-pay.svg'
-  import payIcon2 from '@/assets/svg/g-pay.svg'
-  import payIcon3 from '@/assets/svg/logo-visa.svg'
-  import payIcon4 from '@/assets/svg/logo-mastercard.svg'
-  import payIcon5 from '@/assets/svg/logo-mir.svg'
+import langIconRU from '@/assets/svg/ru-flag.svg'
+import langIconEN from '@/assets/svg/en-flag.svg'
+import backIcon from '@/assets/svg/backArrow.svg'
+import linkIcon from '@/assets/svg/link.svg'
+import payIcon1 from '@/assets/svg/apple-pay.svg'
+import payIcon2 from '@/assets/svg/g-pay.svg'
+import payIcon3 from '@/assets/svg/logo-visa.svg'
+import payIcon4 from '@/assets/svg/logo-mastercard.svg'
+import payIcon5 from '@/assets/svg/logo-mir.svg'
 
-  let routeTo
-  const changeRouter = function (ctx) {
-    routeTo = function (path) {
-      ctx.$router.push(path)
-    }
+let routeTo
+const changeRouter = function (ctx) {
+  routeTo = function (path) {
+    ctx.$router.push(path)
   }
+}
 
-  function pay(amount, email, recurrent) {
-    const widget = new cp.CloudPayments();
+function pay(amount, email, recurrent, locale) {
+  // eslint-disable-next-line no-undef
+  const widget = new cp.CloudPayments()
 
-    //создание ежемесячной подписки
-    const data = {};
-    if (recurrent) {
-      data.cloudPayments = {
-        recurrent: {
-          interval: 'Month',
-          period: 1,
-          amount
-        }
-      }
-    }
-
-    const apiKey = 'pk_5dd54d4b5d9a17e641da689238624';
-
-    widget.pay('auth', // или 'charge'
-      { //options
-        publicId: apiKey, //id из личного кабинета
-        description: `Пожертвование Музею Фаберже в сумме ${amount} рублей`, //назначение
-        amount: amount, //сумма
-        currency: 'RUB', //валюта,
-        email: email,
-        requireEmail: true, // mail в форме оплаты
-        invoiceId: '', //номер заказа  (необязательно)
-        accountId: email, //идентификатор плательщика (необязательно) mail
-        skin: "mini", //дизайн виджета (необязательно)
-        data: data
-      },
-      {
-        onSuccess: function (options) { // 2 - success - действие при успешной оплате
-          routeTo('/gratitude')
-        },
-        onFail: function (reason, options) { // fail - действие при неуспешной оплате
-          // routeTo('/')
-        },
-        onComplete: function (paymentResult, options) {
-          // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
-        }
-      }
-    )
-  };
-
-  export default {
-    data() {
-      return {
-        paymentIcons: [
-          {logo: payIcon1, alt: 'Apple pay'},
-          {logo: payIcon2, alt: 'Google pay'},
-          {logo: payIcon4, alt: 'MasterCard'},
-          {logo: payIcon3, alt: 'VISA'},
-          {logo: payIcon5, alt: 'МИР'}
-        ],
-      }
-    },
-    computed: {
-      name: {
-        get() {
-          return this.$store.state.nameValue
-        },
-        set(value) {
-          this.$store.commit('updateName', value)
-          this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length < 60
-            ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
-          this.isFormValid()
-        }
-      },
-      email: {
-        get() {
-          return this.$store.state.emailValue
-        },
-        set(value) {
-          this.$store.commit('updateEmail', value)
-          this.$store.commit('emailValid', this.isMailValid(this.email))
-          this.isFormValid()
-        }
-      },
-      offerAgreement: {
-        get() {
-          return this.$store.state.isOfferAgreement
-        },
-        set(value) {
-          this.$store.commit('updateOfferAgreement', value)
-          this.isFormValid()
-        }
-      },
+  // создание ежемесячной подписки
+  const data = {}
+  if (recurrent) {
+    data.cloudPayments = {
       recurrent: {
-        get() {
-          return this.$store.state.recurrentPicked
-        },
-        set(value) {
-          this.$store.commit('updateRecurrent', value)
-        }
-      },
-      amountSum: {
-        get() {
-          return this.$store.state.amountValue
-        },
-        set(value) {
-          this.$store.commit('updateAmount', value)
-          this.isFormValid()
-        }
-      },
-    },
-    methods: {
-      setAmount(value) {
-        this.$store.commit('addAmount', value)
-        this.isFormValid()
-      },
-      isMailValid(value) {
-        const mailPattern = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{2,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,5}|[0-9]{1,3})(\]?)$/
-        if (value.length === 0 || value.toLowerCase().match(mailPattern) === null) {
-          return false
-        }
-        return true
-      },
-      getPay() {
-        if (
-          this.nameValue !== ''
-          && this.$store.state.isEmailValid
-          && this.$store.state.isOfferAgreement
-          && this.$store.state.amountValue >= 50
-          && this.$store.state.isBtnActive
-        ) {
-          const isRecurrent = this.$store.state.recurrentPicked === 'single'
-            ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
-
-          changeRouter(this)
-          pay(this.$store.state.amountValue, this.$store.state.emailValue, isRecurrent)
-        }
-      },
-      isFormValid() {
-        this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
-          ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
-      },
-    },
-    mounted() {
-      const paymentScript = document.createElement('script')
-      paymentScript.setAttribute('src', 'https://widget.cloudpayments.ru/bundles/cloudpayments')
-      document.head.appendChild(paymentScript)
+        interval: 'Month',
+        period: 1,
+        amount
+      }
     }
   }
+
+  const currency = locale === 'ru' ? 'RUB' : 'EUR'
+
+  const apiKey = 'pk_5dd54d4b5d9a17e641da689238624'
+
+  widget.pay('auth', // или 'charge'
+    { // options
+      publicId: apiKey, // id из личного кабинета
+      description: `Пожертвование Музею Фаберже в сумме ${amount} рублей`, // назначение
+      amount: amount, // сумма
+      currency: currency, // валюта,
+      email: email,
+      requireEmail: true, // mail в форме оплаты
+      invoiceId: '', // номер заказа  (необязательно)
+      accountId: email, // идентификатор плательщика (необязательно) mail
+      skin: 'mini', // дизайн виджета (необязательно)
+      data: data
+    },
+    {
+      onSuccess: function (options) { // 2 - success - действие при успешной оплате
+        routeTo('/gratitude')
+      },
+      onFail: function (reason, options) { // fail - действие при неуспешной оплате
+        // routeTo('/')
+      },
+      onComplete: function (paymentResult, options) {
+        // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
+      }
+    }
+  )
+}
+
+export default {
+  inject: ['changeLocale'],
+  data () {
+    return {
+      paymentIcons: [
+        {
+          id: 1,
+          logo: payIcon1,
+          alt: 'Apple pay'
+        },
+        {
+          id: 2,
+          logo: payIcon2,
+          alt: 'Google pay'
+        },
+        {
+          id: 3,
+          logo: payIcon4,
+          alt: 'MasterCard'
+        },
+        {
+          id: 4,
+          logo: payIcon3,
+          alt: 'VISA'
+        },
+        {
+          id: 5,
+          logo: payIcon5,
+          alt: 'МИР'
+        }
+      ],
+      languageIcons: {
+        ru: langIconRU,
+        en: langIconEN,
+      },
+      linkIcon: linkIcon,
+      backIcon: backIcon
+    }
+  },
+  computed: {
+    currency: {
+      get () {
+        return this.$store.state.currency
+      }
+    },
+    name: {
+      get () {
+        return this.$store.state.nameValue
+      },
+      set (value) {
+        this.$store.commit('updateName', value)
+        this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length <= 15
+          ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
+        this.isFormValid()
+      }
+    },
+    email: {
+      get () {
+        return this.$store.state.emailValue
+      },
+      set (value) {
+        this.$store.commit('updateEmail', value)
+        this.$store.commit('emailValid', this.isMailValid(this.email))
+        this.isFormValid()
+      }
+    },
+    offerAgreement: {
+      get () {
+        return this.$store.state.isOfferAgreement
+      },
+      set (value) {
+        this.$store.commit('updateOfferAgreement', value)
+        this.isFormValid()
+      }
+    },
+    recurrent: {
+      get () {
+        return this.$store.state.recurrentPicked
+      },
+      set (value) {
+        this.$store.commit('updateRecurrent', value)
+      }
+    },
+    amountSum: {
+      get () {
+        return this.$store.state.amountValue
+      },
+      set (value) {
+        this.$store.commit('updateAmount', value)
+        this.isFormValid()
+      }
+    }
+  },
+  methods: {
+    setAmount (value) {
+      this.$store.commit('addAmount', value)
+      this.isFormValid()
+    },
+    isMailValid (value) {
+      const mailPattern = /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{2,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{2,5}|[0-9]{1,3})(\]?)$/
+      if (value.length === 0 || value.toLowerCase().match(mailPattern) === null) {
+        return false
+      }
+      return true
+    },
+    getPay () {
+      if (
+        this.nameValue !== '' &&
+        this.$store.state.isEmailValid &&
+        this.$store.state.isOfferAgreement &&
+        this.$store.state.amountValue >= 50 &&
+        this.$store.state.isBtnActive
+      ) {
+        const isRecurrent = this.$store.state.recurrentPicked === 'single'
+          ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
+
+        changeRouter(this)
+        pay(this.amountSum, this.email, isRecurrent, this.locale)
+      }
+    },
+    isFormValid () {
+      this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
+        ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
+    },
+
+    changeLang() {
+      this.$store.state.locale === 'ru'
+        ? this.$store.commit('changeLoc', 'en')
+        :  this.$store.commit('changeLoc', 'ru')
+
+      this.changeCurr()
+
+      this.changeLocale(this.$store.state.locale)
+      this.$forceUpdate()
+    },
+    changeCurr() {
+      this.$store.state.locale === 'ru'
+        ? this.$store.commit('changeCurrency', 'RUB')
+        : this.$store.commit('changeCurrency', 'EUR')
+    }
+  },
+  mounted () {
+    const paymentScript = document.createElement('script')
+    paymentScript.setAttribute('src', 'https://widget.cloudpayments.ru/bundles/cloudpayments')
+    document.head.appendChild(paymentScript)
+  }
+}
 </script>
-
-
-
-
-
-
-
