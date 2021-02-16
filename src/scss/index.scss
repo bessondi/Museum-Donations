@@ -37,7 +37,8 @@ a {
   @import "donation";
 }
 
-.offer {
+.offer,
+.gratitude {
   @media screen and (max-width: $tabletWidth) {
     margin-left: 20px;
     margin-right: 20px;

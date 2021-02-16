@@ -24,9 +24,6 @@ export default createStore({
     changeLoc (state, value) {
       state.locale = value
     },
-    changeCurrency (state, value) {
-      state.currency = value
-    },
     updateName (state, value) {
       state.nameValue = value
     },
@@ -47,9 +44,16 @@ export default createStore({
     updateRecurrent (state, value) {
       state.recurrentPicked = value
     },
+    updateCurrency (state, value) {
+      state.currency = value
+    },
     updateAmount (state, value) {
       state.amountValue = value
-      state.amountValue >= 50 ? state.isAmountValid = true : state.isAmountValid = false
+
+      state.currency === 'RUB' && state.amountValue >= 50
+        || state.currency !== 'RUB' && state.amountValue >= 5
+        ? state.isAmountValid = true
+        : state.isAmountValid = false
     },
     addAmount (state, value) {
       if (typeof value === 'number') {
@@ -86,8 +90,9 @@ export const ru = {
     otherAmount: 'Другая сумма',
     amountPlaceholder: 'Минимальная сумма 50 рублей',
     submitBtn: 'Пожертвовать',
-    currency: ' ₽',
-
+    gratitudeText: `Музей Фаберже благодарит Вас за пожертвование в пользу музея!
+      Мы признательны Вам за то, что Вы разделяете нашу ответственность за развитие Музея Фаберже.
+      Культура в России всегда была связана с деятельностью меценатов, и Вы, совершая пожертвование, продолжаете эту традицию.`,
     backBtn: 'Вернуться назад',
     offerText: 'Текст Договора - оферты'
   }
@@ -106,10 +111,11 @@ export const en = {
     recurrentOnce: 'Donate once',
     recurrentMonthly: 'Donate monthly',
     otherAmount: 'Other Amount',
-    amountPlaceholder: 'Minimum amount 5 euro',
+    amountPlaceholder: 'Minimum amount are 5 currency units',
     submitBtn: 'Donate',
-    currency: ' €',
-
+    gratitudeText: `The Fabergé Museum would like to thank you for your donation!
+      We are grateful that you share our responsibility for the development of the Fabergé Museum.
+      Culture in Russia has always been linked to the activities of patrons of the arts, and by making a donation you are continuing this tradition.`,
     backBtn: 'Back to donation',
     offerText: 'Offer Text'
   }
