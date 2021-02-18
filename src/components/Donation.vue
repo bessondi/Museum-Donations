@@ -303,8 +303,8 @@ export default {
         && this.$store.state.isEmailValid
         && this.$store.state.isOfferAgreement
         && this.$store.state.isBtnActive
-        && state.currency === 'RUB' && state.amountValue >= 50
-          || state.currency !== 'RUB' && state.amountValue >= 5
+        && this.currency === 'RUB' && this.amountValue >= 50
+          || this.currency !== 'RUB' && this.amountValue >= 5
       ) {
         const isRecurrent = this.$store.state.recurrentPicked === 'single'
           ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
