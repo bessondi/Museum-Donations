@@ -180,7 +180,7 @@ function pay(amount, email, recurrent, locale, currency) {
       },
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
-        routeTo('/gratitude')
+        // routeTo('/gratitude')
       },
       onComplete: function (paymentResult, options) {
         // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
