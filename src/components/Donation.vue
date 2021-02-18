@@ -41,7 +41,7 @@
             <router-link to="/offer">
               <img class="logo" :src="linkIcon" alt="offer">
             </router-link>
-        </strong>
+          </strong>
           <br>
           <br>
           <small>{{ $locale('form.note') }}</small>
@@ -52,33 +52,47 @@
 
       <!-- subscription or single payment -->
       <div v-if="offerAgreement" class="donation__form__field recurrent">
-        <input v-model="recurrent" type="radio" id="firstType" class="donation__form_hidden" name="recurrent" value="single">
+        <input v-model="recurrent" type="radio" id="firstType" class="donation__form_hidden" name="recurrent"
+               value="single">
         <label :class="$store.state.recurrentPicked === 'single' ? 'checked' : null" for="firstType"
                class="btn">{{ $locale('form.recurrentOnce') }}</label>
-        <input v-model="recurrent" type="radio" id="secondType" class="donation__form_hidden" name="recurrent" value="monthly">
+        <input v-model="recurrent" type="radio" id="secondType" class="donation__form_hidden" name="recurrent"
+               value="monthly">
         <label :class="$store.state.recurrentPicked === 'monthly' ? 'checked' : null" for="secondType"
                class="btn">{{ $locale('form.recurrentMonthly') }}</label>
+      </div>
+
+      <!-- payment currency -->
+      <div v-if="offerAgreement && locale === 'en'" class="donation__form__field recurrent">
+        <input v-model="currency" type="radio" id="firstEnCurrency" class="donation__form_hidden" name="enCurrency"
+               value="EUR">
+        <label :class="$store.state.currency === 'EUR' ? 'checked' : null" for="firstEnCurrency"
+               class="btn">Donate in EUR</label>
+        <input v-model="currency" type="radio" id="secondEnCurrency" class="donation__form_hidden" name="enCurrency"
+               value="USD">
+        <label :class="$store.state.currency === 'USD' ? 'checked' : null" for="secondEnCurrency"
+               class="btn">Donate in USD</label>
       </div>
 
       <!-- sum -->
       <div v-if="offerAgreement" class="donation__form__field amount">
         <input @click="setAmount(50)" type="radio" id="firstAmount" class="donation__form_hidden" name="amount">
-        <label :class="$store.state.amountValue === 50 ? 'checked' : null" for="firstAmount" class="btn btnAmountTitle">50
-          {{ $locale('form.currency') }}</label>
+        <label :class="$store.state.amountValue === 50 ? 'checked' : null" for="firstAmount" class="btn btnAmountTitle">
+          50 {{ currencySign }}
+        </label>
 
         <input @click="setAmount(100)" type="radio" id="secondAmount" class="donation__form_hidden" name="amount">
-        <label :class="$store.state.amountValue === 100 ? 'checked' : null" for="secondAmount"
-               class="btn btnAmountTitle">100
-          {{ $locale('form.currency') }}</label>
+        <label :class="$store.state.amountValue === 100 ? 'checked' : null" for="secondAmount" class="btn btnAmountTitle">
+          100 {{ currencySign }}
+        </label>
 
         <input @click="setAmount(1000)" type="radio" id="thirdAmount" class="donation__form_hidden" name="amount">
-        <label :class="$store.state.amountValue === 1000 ? 'checked' : null" for="thirdAmount"
-               class="btn btnAmountTitle">1000
-          {{ $locale('form.currency') }}</label>
+        <label :class="$store.state.amountValue === 1000 ? 'checked' : null" for="thirdAmount" class="btn btnAmountTitle">
+          1000 {{ currencySign }}
+        </label>
 
         <input @click="setAmount('other')" type="radio" id="otherAmount" class="donation__form_hidden" name="amount">
-        <label :class="$store.state.isAmountFieldVisible ? 'checked' : null"
-               for="otherAmount" class="btn btnAmountTitle">
+        <label :class="$store.state.isAmountFieldVisible ? 'checked' : null" for="otherAmount" class="btn btnAmountTitle">
           {{ $locale('form.otherAmount') }}
         </label>
       </div>
@@ -96,7 +110,9 @@
                :class="$store.state.isNameValid && $store.state.isEmailValid
           && $store.state.isOfferAgreement && $store.state.isBtnActive
             ? 'active' : ''"
-               :value="`${$locale('form.submitBtn')} ${ $store.state.amountValue ? $store.state.amountValue + $locale('form.currency') : ''}`">
+               :value="`${ $locale('form.submitBtn') } ${ $store.state.amountValue ?
+               $store.state.amountValue + currencySign
+               : ''}`">
       </div>
       <div class="paymentLogos">
         <img v-for="icon in paymentIcons" :key="icon.id" class="logo" :src="icon.logo" :alt="icon.alt">
@@ -104,10 +120,6 @@
     </form>
   </div>
 </template>
-
-<!-- TODO: add min 5 euro to EN value -->
-<!-- TODO: add currency to pay widget -->
-<!-- TODO: transfer form handle to $root component -->
 
 <script>
 import langIconRU from '@/assets/svg/ru-flag.svg'
@@ -127,9 +139,10 @@ const changeRouter = function (ctx) {
   }
 }
 
-function pay(amount, email, recurrent, locale) {
-  // eslint-disable-next-line no-undef
-  const widget = new cp.CloudPayments()
+function pay(amount, email, recurrent, locale, currency) {
+  const widgetLanguage = locale === 'en' ? 'en-US' : 'ru-RU'
+
+  const widget = new cp.CloudPayments({language: widgetLanguage})
 
   // создание ежемесячной подписки
   const data = {}
@@ -143,14 +156,14 @@ function pay(amount, email, recurrent, locale) {
     }
   }
 
-  const currency = locale === 'ru' ? 'RUB' : 'EUR'
-
   const apiKey = 'pk_5dd54d4b5d9a17e641da689238624'
 
   widget.pay('auth', // или 'charge'
     { // options
       publicId: apiKey, // id из личного кабинета
-      description: `Пожертвование Музею Фаберже в сумме ${amount} рублей`, // назначение
+      description: widgetLanguage === 'ru-RU'
+        ? `Пожертвование Музею Фаберже в сумме ${amount} ${currency}`
+        : `Donation to the Fabergé Museum in the amount of ${amount} ${currency}`, // назначение
       amount: amount, // сумма
       currency: currency, // валюта,
       email: email,
@@ -161,11 +174,13 @@ function pay(amount, email, recurrent, locale) {
       data: data
     },
     {
-      onSuccess: function (options) { // 2 - success - действие при успешной оплате
+      onSuccess: function (options) {
+        // 2 - success - действие при успешной оплате
         routeTo('/gratitude')
       },
-      onFail: function (reason, options) { // fail - действие при неуспешной оплате
-        // routeTo('/')
+      onFail: function (reason, options) {
+        // fail - действие при неуспешной оплате
+        routeTo('/gratitude')
       },
       onComplete: function (paymentResult, options) {
         // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
@@ -176,7 +191,7 @@ function pay(amount, email, recurrent, locale) {
 
 export default {
   inject: ['changeLocale'],
-  data () {
+  data() {
     return {
       paymentIcons: [
         {
@@ -214,108 +229,120 @@ export default {
     }
   },
   computed: {
+    locale: {
+      get() {
+        return this.$store.state.locale
+      }
+    },
     currency: {
-      get () {
+      get() {
         return this.$store.state.currency
+      },
+      set(value) {
+        this.$store.commit('updateCurrency', value)
+        console.log(this.$store.state.currency)
+      }
+    },
+    currencySign: {
+      get() {
+        return this.currency === 'RUB' ? ' ₽' : this.currency === 'EUR' ? ' €' : ' $'
       }
     },
     name: {
-      get () {
+      get() {
         return this.$store.state.nameValue
       },
-      set (value) {
+      set(value) {
         this.$store.commit('updateName', value)
-        this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length <= 15
+        this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length <= 20
           ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
         this.isFormValid()
       }
     },
     email: {
-      get () {
+      get() {
         return this.$store.state.emailValue
       },
-      set (value) {
+      set(value) {
         this.$store.commit('updateEmail', value)
         this.$store.commit('emailValid', this.isMailValid(this.email))
         this.isFormValid()
       }
     },
     offerAgreement: {
-      get () {
+      get() {
         return this.$store.state.isOfferAgreement
       },
-      set (value) {
+      set(value) {
         this.$store.commit('updateOfferAgreement', value)
         this.isFormValid()
       }
     },
     recurrent: {
-      get () {
+      get() {
         return this.$store.state.recurrentPicked
       },
-      set (value) {
+      set(value) {
         this.$store.commit('updateRecurrent', value)
       }
     },
     amountSum: {
-      get () {
+      get() {
         return this.$store.state.amountValue
       },
-      set (value) {
+      set(value) {
         this.$store.commit('updateAmount', value)
         this.isFormValid()
       }
     }
   },
   methods: {
-    setAmount (value) {
-      this.$store.commit('addAmount', value)
-      this.isFormValid()
-    },
-    isMailValid (value) {
-      const mailPattern = /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{2,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{2,5}|[0-9]{1,3})(\]?)$/
-      if (value.length === 0 || value.toLowerCase().match(mailPattern) === null) {
-        return false
-      }
-      return true
-    },
-    getPay () {
+    getPay() {
       if (
-        this.nameValue !== '' &&
-        this.$store.state.isEmailValid &&
-        this.$store.state.isOfferAgreement &&
-        this.$store.state.amountValue >= 50 &&
-        this.$store.state.isBtnActive
+        this.nameValue !== ''
+        && this.$store.state.isEmailValid
+        && this.$store.state.isOfferAgreement
+        && this.$store.state.isBtnActive
+        && this.currency === 'RUB' && this.amountValue >= 50
+          || this.currency !== 'RUB' && this.amountValue >= 5
       ) {
         const isRecurrent = this.$store.state.recurrentPicked === 'single'
           ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
 
         changeRouter(this)
-        pay(this.amountSum, this.email, isRecurrent, this.locale)
+        pay(this.amountSum, this.email, isRecurrent, this.locale, this.currency)
       }
     },
-    isFormValid () {
+    setAmount(value) {
+      this.$store.commit('addAmount', value)
+      this.isFormValid()
+    },
+    isMailValid(value) {
+      const mailPattern = /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{2,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{2,5}|[0-9]{1,3})(\]?)$/
+      return !(value.length === 0 || value.toLowerCase().match(mailPattern) === null)
+    },
+    isFormValid() {
       this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
         ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
     },
-
     changeLang() {
-      this.$store.state.locale === 'ru'
-        ? this.$store.commit('changeLoc', 'en')
-        :  this.$store.commit('changeLoc', 'ru')
-
-      this.changeCurr()
+      if (this.$store.state.locale === 'ru' && this.$store.state.currency === 'RUB') {
+        this.$store.commit('changeLoc', 'en')
+        this.changeCurrencyType('EUR')
+      } else if (this.$store.state.locale === 'en' && this.$store.state.currency !== 'RUB') {
+        this.$store.commit('changeLoc', 'ru')
+        this.changeCurrencyType('RUB')
+      }
 
       this.changeLocale(this.$store.state.locale)
       this.$forceUpdate()
     },
-    changeCurr() {
-      this.$store.state.locale === 'ru'
-        ? this.$store.commit('changeCurrency', 'RUB')
-        : this.$store.commit('changeCurrency', 'EUR')
+    changeCurrencyType(currencyType) {
+      this.$store.commit('updateCurrency', currencyType)
+      console.log(this.$store.state.locale, this.$store.state.currency)
     }
   },
-  mounted () {
+  mounted() {
     const paymentScript = document.createElement('script')
     paymentScript.setAttribute('src', 'https://widget.cloudpayments.ru/bundles/cloudpayments')
     document.head.appendChild(paymentScript)

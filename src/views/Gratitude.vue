@@ -1,11 +1,30 @@
 <template>
   <div class="gratitude">
-    <div>Logo</div>
+    <div class="museumLogo">
+      <img class="logo" :src="$store.state.locale === 'ru' ? fabergeLogos.ru : fabergeLogos.en" alt="Museum logo">
+    </div>
+
     <h1>{{ $store.state.nameValue }}</h1>
-    <h3>Музей Фаберже благодарит Вас за пожертвование в пользу музея в размере {{ $store.state.amountValue }} рублей!</h3>
-    <p>Мы признательны Вам за то, что Вы разделяете нашу ответственность за развитие Музея Фаберже.
-      Культура в России всегда была связана с деятельностью меценатов, и Вы, совершая пожертвование,
-      продолжаете эту традицию.</p>
-    <img src="#" alt="image">
+    <p>{{ $locale('form.gratitudeText') }}</p>
+
+    <img :src="image" alt="Museum image" class="image">
   </div>
 </template>
+
+<script>
+import fabergeLogoRu from "@/assets/svg/faberge_logo_central_rus.svg"
+import fabergeLogoEn from "@/assets/svg/faberge_logo_central_eng.svg"
+import image from "@/assets/img/BlueRoom.jpg"
+
+export default {
+  data () {
+    return {
+      fabergeLogos: {
+        ru: fabergeLogoRu,
+        en: fabergeLogoEn,
+      },
+      image
+    }
+  }
+}
+</script>
