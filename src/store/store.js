@@ -88,6 +88,7 @@ export const ru = {
     recurrentOnce: 'Единовременно',
     recurrentMonthly: 'Ежемесячно',
     otherAmount: 'Другая сумма',
+    enterAmountValue: 'Введите сумму пожертвования:',
     amountPlaceholder: 'Минимальная сумма 50 рублей',
     submitBtn: 'Пожертвовать',
     gratitudeText: `Музей Фаберже благодарит Вас за пожертвование в пользу музея!
@@ -111,6 +112,7 @@ export const en = {
     recurrentOnce: 'Donate once',
     recurrentMonthly: 'Donate monthly',
     otherAmount: 'Other Amount',
+    enterAmountValue: 'Enter the donation amount:',
     amountPlaceholder: 'Minimum amount are 5 currency units',
     submitBtn: 'Donate',
     gratitudeText: `The Fabergé Museum would like to thank you for your donation!

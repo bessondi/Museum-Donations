@@ -99,7 +99,7 @@
 
       <!-- sum field -->
       <div v-if="offerAgreement && $store.state.isAmountFieldVisible" class="donation__form__field otherAmount">
-        <label for="donationSum">Введите сумму пожертвования:</label>
+        <label for="donationSum">{{ $locale('form.enterAmountValue') }}</label>
         <input v-model.number="amountSum" class="textField" type="number" id="donationSum" name="sum"
                :placeholder="$locale('form.amountPlaceholder')">
       </div>
