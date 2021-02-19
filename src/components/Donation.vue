@@ -18,13 +18,34 @@
     </div>
 
     <form @submit.prevent="getPay" class="donation__form">
-      <div class="donation__form__field">
-        <label for="name"><strong>*{{ $locale('form.nameLabel') }}:</strong></label>
-        <input v-model.trim="name"
-               :class="$store.state.isNameValid === null ? '' : $store.state.isNameValid ? 'valid' : 'invalid'"
-               class="textField" type="text" id="name" name="name" :placeholder="$locale('form.namePlaceholder')"
-               required>
+      <!-- name -->
+      <div class="donation__form__name">
+        <div class="donation__form__field">
+          <label for="name"><strong>{{ $locale('form.nameLabel') }}:</strong></label>
+          <input v-model.trim="name"
+                 class="textField" type="text" id="name" name="name" :placeholder="$locale('form.namePlaceholder')"
+                 :class="$store.state.isNameValid === true && $store.state.nameValue === ''
+                   ? ''
+                   : $store.state.isNameValid
+                     ? 'valid'
+                     : 'invalid'"
+                 >
+        </div>
+        <!-- surname -->
+        <div class="donation__form__field">
+          <label for="name"><strong>{{ $locale('form.surnameLabel') }}:</strong></label>
+          <input v-model.trim="surname"
+                 class="textField" type="text" id="surname" name="surname" :placeholder="$locale('form.surnamePlaceholder')"
+                 :class="$store.state.isSurnameValid === true && $store.state.surnameValue === ''
+                   ? ''
+                   : $store.state.isSurnameValid
+                     ? 'valid'
+                     : 'invalid'"
+                 >
+        </div>
       </div>
+
+      <!-- mail -->
       <div class="donation__form__field">
         <label for="email"><strong>*{{ $locale('form.mailLabel') }}:</strong></label>
         <input v-model.trim="email"
@@ -138,7 +159,6 @@ const changeRouter = function (ctx) {
     ctx.$router.push(path)
   }
 }
-
 function pay(amount, email, recurrent, locale, currency) {
   const widgetLanguage = locale === 'en' ? 'en-US' : 'ru-RU'
 
@@ -180,7 +200,7 @@ function pay(amount, email, recurrent, locale, currency) {
       },
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
-        // routeTo('/gratitude')
+        routeTo('/gratitude')
       },
       onComplete: function (paymentResult, options) {
         // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
@@ -254,8 +274,21 @@ export default {
       },
       set(value) {
         this.$store.commit('updateName', value)
-        this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length <= 20
+        this.$store.state.nameValue.length === 0 ||
+        this.$store.state.nameValue.length >= 2 && this.$store.state.nameValue.length <= 10
           ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
+        this.isFormValid()
+      }
+    },
+    surname: {
+      get() {
+        return this.$store.state.surnameValue
+      },
+      set(value) {
+        this.$store.commit('updateSurname', value)
+        this.$store.state.surnameValue.length === 0 ||
+        this.$store.state.surnameValue.length >= 2 && this.$store.state.surnameValue.length <= 10
+          ? this.$store.commit('surnameValid', true) : this.$store.commit('surnameValid', false)
         this.isFormValid()
       }
     },
@@ -299,8 +332,8 @@ export default {
   methods: {
     getPay() {
       if (
-        this.nameValue !== ''
-        && this.$store.state.isEmailValid
+        // this.nameValue !== '' &&
+        this.$store.state.isEmailValid
         && this.$store.state.isOfferAgreement
         && this.$store.state.isBtnActive
         && this.$store.state.currency === 'RUB' && this.$store.state.amountValue >= 50
@@ -322,7 +355,10 @@ export default {
       return !(value.length === 0 || value.toLowerCase().match(mailPattern) === null)
     },
     isFormValid() {
-      this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
+      this.$store.state.isNameValid &&
+      this.$store.state.isSurnameValid &&
+      this.$store.state.isEmailValid &&
+      this.$store.state.isAmountValid
         ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
     },
     changeLang() {

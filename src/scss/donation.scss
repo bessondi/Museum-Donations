@@ -43,6 +43,18 @@
 
   .donation__form {
 
+    .donation__form__name {
+      display: flex;
+
+      .donation__form__field {
+        margin-right: 15px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
     .donation__form__field {
       margin-top: 20px;
 

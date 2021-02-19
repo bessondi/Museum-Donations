@@ -4,7 +4,13 @@
       <img class="logo" :src="$store.state.locale === 'ru' ? fabergeLogos.ru : fabergeLogos.en" alt="Museum logo">
     </div>
 
-    <h1>{{ $store.state.nameValue }}</h1>
+    <h1>
+      {{
+        $store.state.nameValue.length || $store.state.surnameValue.length
+          ? $store.state.nameValue + ' ' + $store.state.surnameValue
+          : $locale('form.gratitudeDefaultText')
+      }}
+    </h1>
     <p>{{ $locale('form.gratitudeText') }}</p>
 
     <img :src="image" alt="Museum image" class="image">
@@ -17,7 +23,7 @@ import fabergeLogoEn from "@/assets/svg/faberge_logo_central_eng.svg"
 import image from "@/assets/img/BlueRoom.jpg"
 
 export default {
-  data () {
+  data() {
     return {
       fabergeLogos: {
         ru: fabergeLogoRu,
