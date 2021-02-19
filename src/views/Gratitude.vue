@@ -1,24 +1,16 @@
 <template>
 <div class="wrap">
-
   <div class="gratitude" ref="gratitudePage">
     <div class="museumLogo">
       <img class="logo" :src="$store.state.locale === 'ru' ? fabergeLogos.ru : fabergeLogos.en" alt="Museum logo">
     </div>
 
-    <h1 class="gratitude__heading">
-      {{
-        $store.state.nameValue.length || $store.state.surnameValue.length
-          ? $store.state.nameValue + ' ' + $store.state.surnameValue
-          : $locale('form.gratitudeDefaultText')
-      }}
-    </h1>
+    <h1 class="gratitude__heading">{{ getName }}</h1>
     <p class="gratitude__description">{{ $locale('form.gratitudeText') }}</p>
 
     <img :src="image" alt="Museum image" class="gratitude__image">
   </div>
-
-  <button @click="saveAsImage" class="saveImgBtn">Сохранить</button>
+  <button @click="saveAsImage" class="saveImgBtn">{{ $locale('form.saveBtn') }}</button>
 </div>
 </template>
 
@@ -31,6 +23,9 @@ import image from "@/assets/img/BlueRoom.jpg"
 export default {
   data() {
     return {
+      firstName: localStorage.getItem('name'),
+      lastName: localStorage.getItem('surname'),
+
       fabergeLogos: {
         ru: fabergeLogoRu,
         en: fabergeLogoEn,
@@ -38,12 +33,30 @@ export default {
       image
     }
   },
+  computed: {
+    getName() {
+      if (this.firstName === null && this.lastName === null) {
+        return this.$locale('form.gratitudeDefaultText')
+      } else {
+        return `${this.firstName !== null ? this.firstName : ''} ${this.lastName !== null ? this.lastName : ''}!`
+      }
+    }
+  },
   methods: {
     saveAsImage() {
       window.scrollTo(0, 0)
 
-      html2canvas(this.$refs.gratitudePage)
-        .then(canvas => {
+      const options = {
+        width: 1080,
+        height: 1080,
+        x: 0,
+        y: 40,
+        windowWidth: 1080,
+        windowHeight: 1080,
+      }
+
+      html2canvas(this.$refs.gratitudePage, options)
+        .then( canvas => {
           const link = document.createElement('a');
           link.download = 'Faberge gratitude.jpg';
           link.href = canvas.toDataURL('image/jpeg').replace("image/jpeg", "image/octet-stream")
@@ -53,4 +66,5 @@ export default {
     }
   }
 }
+
 </script>

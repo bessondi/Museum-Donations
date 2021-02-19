@@ -159,7 +159,8 @@ const changeRouter = function (ctx) {
     ctx.$router.push(path)
   }
 }
-function pay(amount, email, recurrent, locale, currency) {
+
+function pay(amount, email, recurrent, locale, currency, name = '', surname = '') {
   const widgetLanguage = locale === 'en' ? 'en-US' : 'ru-RU'
 
   const widget = new cp.CloudPayments({language: widgetLanguage})
@@ -196,11 +197,15 @@ function pay(amount, email, recurrent, locale, currency) {
     {
       onSuccess: function (options) {
         // 2 - success - действие при успешной оплате
+
+        name !== '' ? localStorage.setItem('name', name) : null
+        surname !== '' ? localStorage.setItem('surname', surname) : null
         routeTo('/gratitude')
       },
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
-        routeTo('/gratitude')
+
+        // routeTo('/gratitude')
       },
       onComplete: function (paymentResult, options) {
         // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
@@ -343,7 +348,7 @@ export default {
           ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
 
         changeRouter(this)
-        pay(this.amountSum, this.email, isRecurrent, this.locale, this.currency)
+        pay(this.amountSum, this.email, isRecurrent, this.locale, this.currency, this.name, this.surname)
       }
     },
     setAmount(value) {

@@ -43,6 +43,7 @@
     &:hover {
       background-color: $hoverValidPaymentBtn;
       transition: .4s ease;
+      cursor: pointer;
     }
   }
 }

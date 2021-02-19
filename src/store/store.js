@@ -107,6 +107,7 @@ export const ru = {
       Мы признательны Вам за то, что Вы разделяете нашу ответственность за развитие Музея Фаберже.
       Культура в России всегда была связана с деятельностью меценатов, и Вы, совершая пожертвование, продолжаете эту традицию.`,
     backBtn: 'Вернуться назад',
+    saveBtn: 'Сохранить',
     offerText: 'Текст Договора - оферты'
   }
 }
@@ -134,6 +135,7 @@ export const en = {
       We are grateful that you share our responsibility for the development of the Fabergé Museum.
       Culture in Russia has always been linked to the activities of patrons of the arts, and by making a donation you are continuing this tradition.`,
     backBtn: 'Back to donation',
+    saveBtn: 'Save',
     offerText: 'Offer Text'
   }
 }
