@@ -36,11 +36,3 @@ a {
   @import "content";
   @import "donation";
 }
-
-.offer,
-.wrap .gratitude {
-  @media screen and (max-width: $tabletWidth) {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-}

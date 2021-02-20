@@ -179,6 +179,9 @@ function pay(amount, email, recurrent, locale, currency, name = '', surname = ''
 
   const apiKey = 'pk_5dd54d4b5d9a17e641da689238624'
 
+  const storageName = localStorage.getItem('name')
+  const storageSurname = localStorage.getItem('surname')
+
   widget.pay('auth', // или 'charge'
     { // options
       publicId: apiKey, // id из личного кабинета
@@ -198,13 +201,15 @@ function pay(amount, email, recurrent, locale, currency, name = '', surname = ''
       onSuccess: function (options) {
         // 2 - success - действие при успешной оплате
 
-        name !== '' ? localStorage.setItem('name', name) : null
-        surname !== '' ? localStorage.setItem('surname', surname) : null
+        name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
+        surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
         routeTo('/gratitude')
       },
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
 
+        // name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
+        // surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
         // routeTo('/gratitude')
       },
       onComplete: function (paymentResult, options) {
@@ -279,9 +284,14 @@ export default {
       },
       set(value) {
         this.$store.commit('updateName', value)
-        this.$store.state.nameValue.length === 0 ||
-        this.$store.state.nameValue.length >= 2 && this.$store.state.nameValue.length <= 10
-          ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
+
+        this.$store.state.nameValue.length === 0
+        || this.$store.state.nameValue.length >= 2
+        && this.$store.state.nameValue.length <= 10
+        && !this.$store.state.nameValue.match(/\s/g)
+          ? this.$store.commit('nameValid', true)
+          : this.$store.commit('nameValid', false)
+
         this.isFormValid()
       }
     },
@@ -291,9 +301,14 @@ export default {
       },
       set(value) {
         this.$store.commit('updateSurname', value)
-        this.$store.state.surnameValue.length === 0 ||
-        this.$store.state.surnameValue.length >= 2 && this.$store.state.surnameValue.length <= 10
-          ? this.$store.commit('surnameValid', true) : this.$store.commit('surnameValid', false)
+
+        this.$store.state.surnameValue.length === 0
+        || this.$store.state.surnameValue.length >= 2
+        && this.$store.state.surnameValue.length <= 10
+        && !this.$store.state.surnameValue.match(/\s/g)
+          ? this.$store.commit('surnameValid', true)
+          : this.$store.commit('surnameValid', false)
+
         this.isFormValid()
       }
     },
