@@ -10,6 +10,10 @@
   padding: 30px 50px;
   box-sizing: border-box;
 
+  @media screen and (max-width: $mobileWidth) {
+    padding: 30px 20px;
+  }
+
   .donation__header {
     display: inherit;
     justify-content: space-between;
@@ -38,10 +42,23 @@
       font-family: 'PlayfairDisplay', serif;
       text-align: center;
       margin-bottom: 1em;
+      font-size: 2.4rem;
     }
   }
 
   .donation__form {
+
+    .donation__form__name {
+      display: flex;
+
+      .donation__form__field {
+        margin-right: 10px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
 
     .donation__form__field {
       margin-top: 20px;

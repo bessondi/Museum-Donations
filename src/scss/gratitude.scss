@@ -1,19 +1,49 @@
 @import "templates";
 
-.gratitude {
-  @extend %page;
+.wrap {
+  display: flex;
+  flex-direction: column;
 
-  font-size: 1.3rem;
+  .gratitude {
+    @extend %page;
+    font-size: 1.3rem;
 
-  .museumLogo {
-    width: 150px;
-    height: 100%;
-    margin-bottom: 50px;
+    .museumLogo {
+      margin-bottom: 50px;
+
+      .logo {
+        width: 150px;
+        height: 100%;
+      }
+    }
+
+    &__heading,
+    &__description {
+      text-align: center;
+    }
+
+    .gratitude__image {
+      margin-top: 50px;
+      width: 100%;
+      height: 100%;
+    }
   }
 
-  .image {
-    margin-top: 50px;
-    width: 100%;
-    height: 100%;
+  .saveImgBtn {
+    width: 200px;
+    height: 60px;
+    margin: 20px auto 60px;
+    border: none;
+    border-radius: $btnRadius;
+    background: $hoverActiveOptionBtn;
+    color: $formBackground;
+    outline: none;
+    transition: .4s ease;
+
+    &:hover {
+      background-color: $hoverValidPaymentBtn;
+      transition: .4s ease;
+      cursor: pointer;
+    }
   }
 }

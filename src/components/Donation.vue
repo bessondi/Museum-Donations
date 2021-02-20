@@ -18,13 +18,34 @@
     </div>
 
     <form @submit.prevent="getPay" class="donation__form">
-      <div class="donation__form__field">
-        <label for="name"><strong>*{{ $locale('form.nameLabel') }}:</strong></label>
-        <input v-model.trim="name"
-               :class="$store.state.isNameValid === null ? '' : $store.state.isNameValid ? 'valid' : 'invalid'"
-               class="textField" type="text" id="name" name="name" :placeholder="$locale('form.namePlaceholder')"
-               required>
+      <!-- name -->
+      <div class="donation__form__name">
+        <div class="donation__form__field">
+          <label for="name"><strong>{{ $locale('form.nameLabel') }}:</strong></label>
+          <input v-model.trim="name"
+                 class="textField" type="text" id="name" name="name" :placeholder="$locale('form.namePlaceholder')"
+                 :class="$store.state.isNameValid === true && $store.state.nameValue === ''
+                   ? ''
+                   : $store.state.isNameValid
+                     ? 'valid'
+                     : 'invalid'"
+                 >
+        </div>
+        <!-- surname -->
+        <div class="donation__form__field">
+          <label for="name"><strong>{{ $locale('form.surnameLabel') }}:</strong></label>
+          <input v-model.trim="surname"
+                 class="textField" type="text" id="surname" name="surname" :placeholder="$locale('form.surnamePlaceholder')"
+                 :class="$store.state.isSurnameValid === true && $store.state.surnameValue === ''
+                   ? ''
+                   : $store.state.isSurnameValid
+                     ? 'valid'
+                     : 'invalid'"
+                 >
+        </div>
       </div>
+
+      <!-- mail -->
       <div class="donation__form__field">
         <label for="email"><strong>*{{ $locale('form.mailLabel') }}:</strong></label>
         <input v-model.trim="email"
@@ -139,7 +160,7 @@ const changeRouter = function (ctx) {
   }
 }
 
-function pay(amount, email, recurrent, locale, currency) {
+function pay(amount, email, recurrent, locale, currency, name = '', surname = '') {
   const widgetLanguage = locale === 'en' ? 'en-US' : 'ru-RU'
 
   const widget = new cp.CloudPayments({language: widgetLanguage})
@@ -157,6 +178,9 @@ function pay(amount, email, recurrent, locale, currency) {
   }
 
   const apiKey = 'pk_5dd54d4b5d9a17e641da689238624'
+
+  const storageName = localStorage.getItem('name')
+  const storageSurname = localStorage.getItem('surname')
 
   widget.pay('auth', // или 'charge'
     { // options
@@ -176,10 +200,16 @@ function pay(amount, email, recurrent, locale, currency) {
     {
       onSuccess: function (options) {
         // 2 - success - действие при успешной оплате
+
+        name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
+        surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
         routeTo('/gratitude')
       },
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
+
+        // name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
+        // surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
         // routeTo('/gratitude')
       },
       onComplete: function (paymentResult, options) {
@@ -254,8 +284,31 @@ export default {
       },
       set(value) {
         this.$store.commit('updateName', value)
-        this.$store.state.nameValue.length >= 3 && this.$store.state.nameValue.length <= 20
-          ? this.$store.commit('nameValid', true) : this.$store.commit('nameValid', false)
+
+        this.$store.state.nameValue.length === 0
+        || this.$store.state.nameValue.length >= 2
+        && this.$store.state.nameValue.length <= 10
+        && !this.$store.state.nameValue.match(/\s/g)
+          ? this.$store.commit('nameValid', true)
+          : this.$store.commit('nameValid', false)
+
+        this.isFormValid()
+      }
+    },
+    surname: {
+      get() {
+        return this.$store.state.surnameValue
+      },
+      set(value) {
+        this.$store.commit('updateSurname', value)
+
+        this.$store.state.surnameValue.length === 0
+        || this.$store.state.surnameValue.length >= 2
+        && this.$store.state.surnameValue.length <= 10
+        && !this.$store.state.surnameValue.match(/\s/g)
+          ? this.$store.commit('surnameValid', true)
+          : this.$store.commit('surnameValid', false)
+
         this.isFormValid()
       }
     },
@@ -299,8 +352,8 @@ export default {
   methods: {
     getPay() {
       if (
-        this.nameValue !== ''
-        && this.$store.state.isEmailValid
+        // this.nameValue !== '' &&
+        this.$store.state.isEmailValid
         && this.$store.state.isOfferAgreement
         && this.$store.state.isBtnActive
         && this.$store.state.currency === 'RUB' && this.$store.state.amountValue >= 50
@@ -310,7 +363,7 @@ export default {
           ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
 
         changeRouter(this)
-        pay(this.amountSum, this.email, isRecurrent, this.locale, this.currency)
+        pay(this.amountSum, this.email, isRecurrent, this.locale, this.currency, this.name, this.surname)
       }
     },
     setAmount(value) {
@@ -322,7 +375,10 @@ export default {
       return !(value.length === 0 || value.toLowerCase().match(mailPattern) === null)
     },
     isFormValid() {
-      this.$store.state.isNameValid && this.$store.state.isEmailValid && this.$store.state.isAmountValid
+      this.$store.state.isNameValid &&
+      this.$store.state.isSurnameValid &&
+      this.$store.state.isEmailValid &&
+      this.$store.state.isAmountValid
         ? this.$store.commit('formValid', true) : this.$store.commit('formValid', false)
     },
     changeLang() {
