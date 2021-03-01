@@ -201,15 +201,13 @@ function pay(amount, email, recurrent, locale, currency, name = '', surname = ''
       onSuccess: function (options) {
         // 2 - success - действие при успешной оплате
 
-        name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
-        surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
+        // name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
+        // surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
         routeTo('/gratitude')
       },
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
 
-        // name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
-        // surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
         // routeTo('/gratitude')
       },
       onComplete: function (paymentResult, options) {
@@ -352,12 +350,12 @@ export default {
   methods: {
     getPay() {
       if (
-        // this.nameValue !== '' &&
         this.$store.state.isEmailValid
         && this.$store.state.isOfferAgreement
         && this.$store.state.isBtnActive
-        && this.$store.state.currency === 'RUB' && this.$store.state.amountValue >= 50
-          || this.$store.state.currency !== 'RUB' && this.$store.state.amountValue >= 5
+        && ( (this.$store.state.currency === 'RUB' && this.$store.state.amountValue >= 50)
+          || (this.$store.state.currency === 'EUR' || this.$store.state.currency === 'USD')
+          && this.$store.state.amountValue >= 5 )
       ) {
         const isRecurrent = this.$store.state.recurrentPicked === 'single'
           ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
