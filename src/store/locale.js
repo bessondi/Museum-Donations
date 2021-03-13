@@ -4,7 +4,7 @@ export default {
 
     const changeLang = name => currentLang = name
 
-    app.config.globalProperties.$locale = key  => {
+    app.config.globalProperties.$locale = key => {
       return key.split('.').reduce((words, k) => {
         return words[k] || 'wrongValue'
       }, options[currentLang])

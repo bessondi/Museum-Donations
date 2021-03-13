@@ -23,8 +23,10 @@ import image from "@/assets/img/BlueRoom.jpg"
 export default {
   data() {
     return {
-      firstName: localStorage.getItem('name'),
-      lastName: localStorage.getItem('surname'),
+      // firstName: localStorage.getItem('name'),
+      // lastName: localStorage.getItem('surname'),
+      firstName: this.$store.state.nameValue,
+      lastName: this.$store.state.surnameValue,
 
       fabergeLogos: {
         ru: fabergeLogoRu,
@@ -35,10 +37,10 @@ export default {
   },
   computed: {
     getName() {
-      if (this.firstName === null && this.lastName === null) {
+      if (!this.firstName && !this.lastName) {
         return this.$locale('form.gratitudeDefaultText')
       } else {
-        return `${this.firstName !== null ? this.firstName : ''} ${this.lastName !== null ? this.lastName : ''}!`
+        return `${this.firstName.length ? this.firstName : ''} ${this.lastName.length ? this.lastName : ''}!`
       }
     }
   },

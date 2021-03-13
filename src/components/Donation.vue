@@ -97,18 +97,21 @@
 
       <!-- sum -->
       <div v-if="offerAgreement" class="donation__form__field amount">
-        <input @click="setAmount(50)" type="radio" id="firstAmount" class="donation__form_hidden" name="amount">
-        <label :class="$store.state.amountValue === 50 ? 'checked' : null" for="firstAmount" class="btn btnAmountTitle">
-          50 {{ currencySign }}
+        <input @click="setAmount(200)" type="radio" id="firstAmount" class="donation__form_hidden" name="amount">
+        <label :class="$store.state.amountValue === 200 && !$store.state.isAmountFieldVisible ? 'checked' : null"
+               for="firstAmount" class="btn btnAmountTitle">
+          200 {{ currencySign }}
         </label>
 
-        <input @click="setAmount(100)" type="radio" id="secondAmount" class="donation__form_hidden" name="amount">
-        <label :class="$store.state.amountValue === 100 ? 'checked' : null" for="secondAmount" class="btn btnAmountTitle">
-          100 {{ currencySign }}
+        <input @click="setAmount(500)" type="radio" id="secondAmount" class="donation__form_hidden" name="amount">
+        <label :class="$store.state.amountValue === 500 && !$store.state.isAmountFieldVisible ? 'checked' : null"
+               for="secondAmount" class="btn btnAmountTitle">
+          500 {{ currencySign }}
         </label>
 
         <input @click="setAmount(1000)" type="radio" id="thirdAmount" class="donation__form_hidden" name="amount">
-        <label :class="$store.state.amountValue === 1000 ? 'checked' : null" for="thirdAmount" class="btn btnAmountTitle">
+        <label :class="$store.state.amountValue === 1000 && !$store.state.isAmountFieldVisible ? 'checked' : null"
+               for="thirdAmount" class="btn btnAmountTitle">
           1000 {{ currencySign }}
         </label>
 
@@ -201,15 +204,13 @@ function pay(amount, email, recurrent, locale, currency, name = '', surname = ''
       onSuccess: function (options) {
         // 2 - success - действие при успешной оплате
 
-        name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
-        surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
+        // name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
+        // surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
         routeTo('/gratitude')
       },
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
 
-        // name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
-        // surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
         // routeTo('/gratitude')
       },
       onComplete: function (paymentResult, options) {
@@ -352,12 +353,12 @@ export default {
   methods: {
     getPay() {
       if (
-        // this.nameValue !== '' &&
         this.$store.state.isEmailValid
         && this.$store.state.isOfferAgreement
         && this.$store.state.isBtnActive
-        && this.$store.state.currency === 'RUB' && this.$store.state.amountValue >= 50
-          || this.$store.state.currency !== 'RUB' && this.$store.state.amountValue >= 5
+        && ( (this.$store.state.currency === 'RUB' && this.$store.state.amountValue >= 200)
+          || (this.$store.state.currency === 'EUR' || this.$store.state.currency === 'USD')
+          && this.$store.state.amountValue >= 5 )
       ) {
         const isRecurrent = this.$store.state.recurrentPicked === 'single'
           ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
@@ -395,7 +396,6 @@ export default {
     },
     changeCurrencyType(currencyType) {
       this.$store.commit('updateCurrency', currencyType)
-      console.log(this.$store.state.locale, this.$store.state.currency)
     }
   },
   mounted() {

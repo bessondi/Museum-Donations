@@ -59,7 +59,7 @@ export default createStore({
     updateAmount (state, value) {
       state.amountValue = value
 
-      state.currency === 'RUB' && state.amountValue >= 50
+      state.currency === 'RUB' && state.amountValue >= 200
         || state.currency !== 'RUB' && state.amountValue >= 5
         ? state.isAmountValid = true
         : state.isAmountValid = false
@@ -100,7 +100,7 @@ export const ru = {
     recurrentMonthly: 'Ежемесячно',
     otherAmount: 'Другая сумма',
     enterAmountValue: 'Введите сумму пожертвования:',
-    amountPlaceholder: 'Минимальная сумма 50 рублей',
+    amountPlaceholder: 'Минимальная сумма 200 рублей',
     submitBtn: 'Пожертвовать',
     gratitudeDefaultText: 'Уважаемый благотворитель!',
     gratitudeText: `Музей Фаберже благодарит Вас за пожертвование в пользу музея!
@@ -116,7 +116,7 @@ export const en = {
   form: {
     changeLangBtn: 'ru',
     heading: 'Donations for Fabergé Museum',
-    description: 'The Fabergé Museum in St. Petersburg and the Cultural and Historical Foundation «Link of Times» invites you to support the Museum by making a donation to the Foundation\'s account for its statutory activities. Your participation will be a significant help in supporting our Museum, which will allow it to fully fulfill its main tasks: to collect, study and popularize Russian art!',
+    description: 'The Fabergé Museum in St. Petersburg and the Cultural and Historical Foundation «The Link of Times» invites you to support Museum by making a donation to the Foundation\'s account for its statutory activities. Your participation will be a significant help in supporting our Museum, which will allow it to fully fulfill its main tasks: to collect, study and popularize Russian art!',
     nameLabel: 'First name',
     surnameLabel: 'Last name',
     namePlaceholder: 'Carl',
