@@ -122,9 +122,10 @@
       </div>
 
       <!-- sum field -->
-      <div v-if="offerAgreement && $store.state.isAmountFieldVisible" class="donation__form__field otherAmount">
+      <div v-show="offerAgreement && $store.state.isAmountFieldVisible"
+        class="donation__form__field otherAmount" >
         <label for="donationSum">{{ $locale('form.enterAmountValue') }}</label>
-        <input v-model.number="amountSum" class="textField" type="number" id="donationSum" name="sum"
+        <input v-model.number="amountSum" class="textField" type="number" id="donationSum" name="sum" ref="userAmount"
                :placeholder="$locale('form.amountPlaceholder')">
       </div>
 
@@ -369,6 +370,11 @@ export default {
     },
     setAmount(value) {
       this.$store.commit('addAmount', value)
+
+      if (value === 'other') {
+        this.$nextTick(() => this.$refs.userAmount.focus())
+      }
+
       this.isFormValid()
     },
     isMailValid(value) {

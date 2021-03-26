@@ -59,11 +59,11 @@ export default {
 
       html2canvas(this.$refs.gratitudePage, options)
         .then( canvas => {
-          const link = document.createElement('a');
-          link.download = 'Faberge gratitude.jpg';
+          const link = document.createElement('a')
+          link.download = 'Faberge gratitude.jpg'
           link.href = canvas.toDataURL('image/jpeg').replace("image/jpeg", "image/octet-stream")
-          link.click();
-          link.delete;
+          link.click()
+          link.delete
         })
     }
   }

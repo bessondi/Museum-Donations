@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="filling">
-      <video class="egg" preload muted loop playsinline autoplay poster="">
+      <video class="egg" preload muted loop playsinline autoplay>
         <source :src="webm" type="video/webm">
         <source :src="mp4" type="video/mp4">
       </video>
