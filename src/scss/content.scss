@@ -1,27 +1,41 @@
 .content {
   display: none;
-  justify-content: center;
-  align-items: center;
   width: calc(100% - 600px);
   max-height: 100%;
   box-sizing: border-box;
-  opacity: 0.8;
 
-  .filling {
+  &__filling {
     display: inherit;
     justify-content: center;
     background-color: $contentBackground;
     width: 100%;
     height: 100%;
+  }
 
-    .egg {
-       width: 100%;
-       height: 100%;
-       max-width: 600px;
+  &__video-egg {
+    width: 100%;
+    height: 100%;
+    max-width: 600px;
+  }
+
+  &__background {
+    @media screen and (min-width: $tabletWidth) {
+      background: $activeOptionBtn;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      opacity: 0.2;
     }
   }
 
   @media screen and (min-width: $tabletWidth) {
     display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
   }
 }

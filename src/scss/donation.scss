@@ -10,11 +10,21 @@
   padding: 30px 50px;
   box-sizing: border-box;
 
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow-y: auto;
+
+  @media screen and (max-width: $tabletWidth) {
+    position: static;
+    margin: 0 auto;
+  }
+
   @media screen and (max-width: $mobileWidth) {
     padding: 30px 20px;
   }
 
-  .donation__header {
+  &__header {
     display: inherit;
     justify-content: space-between;
 
@@ -37,166 +47,20 @@
     }
   }
 
-  .donation__title {
-    .heading {
-      font-family: 'PlayfairDisplay', serif;
-      text-align: center;
-      margin-bottom: 1em;
-      font-size: 2.4rem;
-    }
+  &__title-heading {
+    font-family: 'PlayfairDisplay', serif;
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 2.4rem;
   }
 
-  .donation__form {
-
-    .donation__form__name {
-      display: flex;
-
-      .donation__form__field {
-        margin-right: 10px;
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
-
-    .donation__form__field {
-      margin-top: 20px;
-
-      & > label {
-        width: 100%;
-      }
-
-      .textField {
-        width: 100%;
-        height: 50px;
-        padding: 10px;
-        margin-top: 10px;
-        border-radius: $btnRadius;
-        border: 1px solid $inputBorder;
-        box-sizing: border-box;
-      }
-
-      &.recurrent,
-      &.amount {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-
-        @media screen and (max-width: $mobileWidth) {
-          flex-wrap: wrap;
-          margin-bottom: 40px;
-        }
-      }
-
-      &.amount {
-        & .btn:last-child {
-          flex-basis: 250%;
-        }
-      }
-
-      .valid {
-        border: 2px solid $validInputBorder;
-      }
-
-      .invalid {
-        border: 2px solid $invalidInputBorder;
-      }
-
-      input::-webkit-outer-spin-button,
-      input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-
-      input[type=number] {
-        -moz-appearance: textfield;
-      }
-
-      .agreement,
-      .recurrent,
-      .btn {
-        cursor: pointer;
-      }
-
-      .agreement {
-        & .logo {
-          width: 16px;
-          height: 16px;
-          margin-top: 5px;
-          margin-left: 8px;
-          cursor: pointer;
-          opacity: 1;
-
-          &:hover {
-            opacity: 0.6;
-          }
-        }
-      }
-
-      .btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 15px 20px;
-        margin-right: 10px;
-        background: $optionBtn;
-        border-radius: $btnRadius;
-
-        &:last-child {
-          margin-right: 0;
-        }
-
-        @media screen and (max-width: $mobileWidth) {
-          margin-top: 15px;
-          margin-right: 0;
-        }
-
-        &:hover {
-          background: $hoverOptionBtn;
-        }
-
-        &.checked {
-          background: $activeOptionBtn;
-          color: $formBackground;
-
-          &:hover {
-            background: $hoverActiveOptionBtn;
-          }
-        }
-      }
-    }
-
-    .submitBtn {
-      height: 50px;
-      width: 100%;
-      border: none;
-      border-radius: 15px 15px 15px 15px;
-      background-color: $invalidPaymentBtn;
-      color: $formBackground;
-      margin-top: 20px;
-      transition: .4s ease;
-      cursor: not-allowed;
-
-      &.active {
-        background-color: $validPaymentBtn;
-        cursor: pointer;
-        transition: .4s ease;
-
-        &:hover {
-          background-color: $hoverValidPaymentBtn;
-          transition: .4s ease;
-        }
-      }
-    }
-
-    .paymentLogos {
+  &__form {
+    .payment-logos {
       display: flex;
       justify-content: space-around;
       max-width: 450px;
       width: 100%;
-      margin: 20px auto;
+      margin: 30px auto 20px;
 
       .logo {
         height: 25px;
@@ -207,10 +71,170 @@
         flex-wrap: wrap;
       }
     }
+  }
 
-    .donation__form_hidden {
-      display: none;
+  &__form-credential {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    .donation__form-field {
+      width: 100%;
+      margin: 0;
+
+      &:first-child {
+        margin-right: 10px;
+      }
     }
+  }
+
+  &__form-label {
+    font-weight: bold;
+  }
+
+  &__form-field {
+    margin: 20px 0;
+
+    &.otherAmount {
+      margin-top: 30px;
+    }
+
+    &.recurrent,
+    &.amount {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+
+      @media screen and (max-width: $mobileWidth) {
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+      }
+    }
+
+    &.amount {
+      & .donation__form-button:last-child {
+        flex-basis: 250%;
+      }
+    }
+
+    & .logo {
+      width: 16px;
+      height: 16px;
+      margin-top: 5px;
+      margin-left: 10px;
+      cursor: pointer;
+      opacity: 1;
+
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+
+    & > label {
+      width: 100%;
+    }
+
+    .valid {
+      border: 2px solid $validInputBorder;
+    }
+
+    .invalid {
+      border: 2px solid $invalidInputBorder;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  }
+
+  &__form-agreement {
+    margin-left: 5px;
+  }
+
+  &__form-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 15px 20px;
+    margin-right: 10px;
+    background: $optionBtn;
+    border-radius: $btnRadius;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    @media screen and (max-width: $mobileWidth) {
+      margin-top: 15px;
+      margin-right: 0;
+    }
+
+    &:hover {
+      background: $hoverOptionBtn;
+    }
+
+    &.checked {
+      background: $activeOptionBtn;
+      color: $formBackground;
+
+      &:hover {
+        background: $hoverActiveOptionBtn;
+      }
+    }
+  }
+
+  &__form-note {
+    display: block;
+    margin-top: 10px;
+  }
+
+  &__form-text {
+    width: 100%;
+    height: 50px;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: $btnRadius;
+    border: 1px solid $inputBorder;
+    box-sizing: border-box;
+  }
+
+  &__form-submit {
+    height: 50px;
+    width: 100%;
+    border: none;
+    border-radius: 15px 15px 15px 15px;
+    background-color: $invalidPaymentBtn;
+    color: $formBackground;
+    transition: .4s ease;
+    cursor: not-allowed;
+
+    &.active {
+      background-color: $validPaymentBtn;
+      cursor: pointer;
+      transition: .4s ease;
+
+      &:hover {
+        background-color: $hoverValidPaymentBtn;
+        transition: .4s ease;
+      }
+    }
+  }
+
+  &__form-input_hidden {
+    display: none;
+  }
+
+  &__form-toggle,
+  &__form-agreement,
+  &__form-button,
+  .recurrent {
+    cursor: pointer;
   }
 }
 

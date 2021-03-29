@@ -1,6 +1,6 @@
 <template>
   <div class="offer">
-    <router-link to="/" class="btn back">
+    <router-link to="/" class="donation__form-button back">
       <button>{{ $locale('form.backBtn') }}</button>
     </router-link>
 
