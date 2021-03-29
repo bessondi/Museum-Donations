@@ -13,17 +13,17 @@
     </div>
 
     <div class="donation__title">
-      <h1 class="heading">{{ $locale('form.heading') }}</h1>
-      <p class="description">{{ $locale('form.description') }}</p>
+      <h1 class="donation__title-heading">{{ $locale('form.heading') }}</h1>
+      <p class="donation__title-description">{{ $locale('form.description') }}</p>
     </div>
 
     <form @submit.prevent="getPay" class="donation__form">
       <!-- name -->
-      <div class="donation__form__name">
-        <div class="donation__form__field">
-          <label for="name"><strong>{{ $locale('form.nameLabel') }}:</strong></label>
+      <div class="donation__form-credential">
+        <div class="donation__form-field">
+          <label for="name" class="donation__form-label">{{ $locale('form.nameLabel') }}:</label>
           <input v-model.trim="name"
-                 class="textField" type="text" id="name" name="name" :placeholder="$locale('form.namePlaceholder')"
+                 class="donation__form-text" type="text" id="name" name="name" :placeholder="$locale('form.namePlaceholder')"
                  :class="$store.state.isNameValid === true && $store.state.nameValue === ''
                    ? ''
                    : $store.state.isNameValid
@@ -32,10 +32,10 @@
                  >
         </div>
         <!-- surname -->
-        <div class="donation__form__field">
-          <label for="name"><strong>{{ $locale('form.surnameLabel') }}:</strong></label>
+        <div class="donation__form-field">
+          <label for="name" class="donation__form-label">{{ $locale('form.surnameLabel') }}:</label>
           <input v-model.trim="surname"
-                 class="textField" type="text" id="surname" name="surname" :placeholder="$locale('form.surnamePlaceholder')"
+                 class="donation__form-text" type="text" id="surname" name="surname" :placeholder="$locale('form.surnamePlaceholder')"
                  :class="$store.state.isSurnameValid === true && $store.state.surnameValue === ''
                    ? ''
                    : $store.state.isSurnameValid
@@ -46,99 +46,100 @@
       </div>
 
       <!-- mail -->
-      <div class="donation__form__field">
-        <label for="email"><strong>*{{ $locale('form.mailLabel') }}:</strong></label>
+      <div class="donation__form-field">
+        <label for="email" class="donation__form-label">*{{ $locale('form.mailLabel') }}:</label>
         <input v-model.trim="email"
                :class="$store.state.isEmailValid === null ? '' : $store.state.isEmailValid ? 'valid' : 'invalid'"
-               class="textField" type="email" id="email" name="email" placeholder="faberge@museum.ru"
-               required>
+               class="donation__form-text" type="email" id="email" name="email" placeholder="faberge@museum.ru"
+               required
+        >
       </div>
 
       <!-- agreements -->
-      <div class="donation__form__field">
-        <input v-model="offerAgreement" type="checkbox" id="offerAgreement" name="offerAgreement">
-        <label class="agreement" for="offerAgreement">
-          <strong>{{ $locale('form.offerAgreement') }}
-            <router-link to="/offer">
-              <img class="logo" :src="linkIcon" alt="offer">
-            </router-link>
-          </strong>
-          <br>
-          <br>
-          <small>{{ $locale('form.note') }}</small>
+      <div class="donation__form-field">
+        <input v-model="offerAgreement" class="donation__form-toggle" type="checkbox" id="offerAgreement" name="offerAgreement">
+        <label class="donation__form-agreement donation__form-label" for="offerAgreement">
+          {{ $locale('form.offerAgreement') }}
         </label>
+        <router-link to="/offer">
+          <img class="logo" :src="linkIcon" alt="offer">
+        </router-link>
+        <small class="donation__form-note">{{ $locale('form.note') }}</small>
+
         <!--        <input v-model="isEmailSubscription" type="checkbox" id="emailSubscription" name="emailSubscription">-->
         <!--        <label class="agreement" for="emailSubscription"> Хочу получать письма на эл.почту</label>-->
       </div>
 
       <!-- subscription or single payment -->
-      <div v-if="offerAgreement" class="donation__form__field recurrent">
-        <input v-model="recurrent" type="radio" id="firstType" class="donation__form_hidden" name="recurrent"
+      <div v-if="offerAgreement" class="donation__form-field recurrent">
+        <input v-model="recurrent" type="radio" id="firstType" class="donation__form-input_hidden" name="recurrent"
                value="single">
         <label :class="$store.state.recurrentPicked === 'single' ? 'checked' : null" for="firstType"
-               class="btn">{{ $locale('form.recurrentOnce') }}</label>
-        <input v-model="recurrent" type="radio" id="secondType" class="donation__form_hidden" name="recurrent"
+               class="donation__form-button">{{ $locale('form.recurrentOnce') }}</label>
+        <input v-model="recurrent" type="radio" id="secondType" class="donation__form-input_hidden" name="recurrent"
                value="monthly">
         <label :class="$store.state.recurrentPicked === 'monthly' ? 'checked' : null" for="secondType"
-               class="btn">{{ $locale('form.recurrentMonthly') }}</label>
+               class="donation__form-button">{{ $locale('form.recurrentMonthly') }}</label>
       </div>
 
       <!-- payment currency -->
-      <div v-if="offerAgreement && locale === 'en'" class="donation__form__field recurrent">
-        <input v-model="currency" type="radio" id="firstEnCurrency" class="donation__form_hidden" name="enCurrency"
+      <div v-if="offerAgreement && locale === 'en'" class="donation__form-field recurrent">
+        <input v-model="currency" type="radio" id="firstEnCurrency" class="donation__form-input_hidden" name="enCurrency"
                value="EUR">
         <label :class="$store.state.currency === 'EUR' ? 'checked' : null" for="firstEnCurrency"
-               class="btn">Donate in EUR</label>
-        <input v-model="currency" type="radio" id="secondEnCurrency" class="donation__form_hidden" name="enCurrency"
+               class="donation__form-button">Donate in EUR</label>
+        <input v-model="currency" type="radio" id="secondEnCurrency" class="donation__form-input_hidden" name="enCurrency"
                value="USD">
         <label :class="$store.state.currency === 'USD' ? 'checked' : null" for="secondEnCurrency"
-               class="btn">Donate in USD</label>
+               class="donation__form-button">Donate in USD</label>
       </div>
 
       <!-- sum -->
-      <div v-if="offerAgreement" class="donation__form__field amount">
-        <input @click="setAmount(200)" type="radio" id="firstAmount" class="donation__form_hidden" name="amount">
+      <div v-if="offerAgreement" class="donation__form-field amount">
+        <input @click="setAmount(200)" type="radio" id="firstAmount" class="donation__form-input_hidden" name="amount">
         <label :class="$store.state.amountValue === 200 && !$store.state.isAmountFieldVisible ? 'checked' : null"
-               for="firstAmount" class="btn btnAmountTitle">
+               for="firstAmount" class="donation__form-button">
           200 {{ currencySign }}
         </label>
 
-        <input @click="setAmount(500)" type="radio" id="secondAmount" class="donation__form_hidden" name="amount">
+        <input @click="setAmount(500)" type="radio" id="secondAmount" class="donation__form-input_hidden" name="amount">
         <label :class="$store.state.amountValue === 500 && !$store.state.isAmountFieldVisible ? 'checked' : null"
-               for="secondAmount" class="btn btnAmountTitle">
+               for="secondAmount" class="donation__form-button">
           500 {{ currencySign }}
         </label>
 
-        <input @click="setAmount(1000)" type="radio" id="thirdAmount" class="donation__form_hidden" name="amount">
+        <input @click="setAmount(1000)" type="radio" id="thirdAmount" class="donation__form-input_hidden" name="amount">
         <label :class="$store.state.amountValue === 1000 && !$store.state.isAmountFieldVisible ? 'checked' : null"
-               for="thirdAmount" class="btn btnAmountTitle">
+               for="thirdAmount" class="donation__form-button">
           1000 {{ currencySign }}
         </label>
 
-        <input @click="setAmount('other')" type="radio" id="otherAmount" class="donation__form_hidden" name="amount">
-        <label :class="$store.state.isAmountFieldVisible ? 'checked' : null" for="otherAmount" class="btn btnAmountTitle">
+        <input @click="setAmount('other')" type="radio" id="otherAmount" class="donation__form-input_hidden" name="amount">
+        <label :class="$store.state.isAmountFieldVisible ? 'checked' : null" for="otherAmount" class="donation__form-button">
           {{ $locale('form.otherAmount') }}
         </label>
       </div>
 
       <!-- sum field -->
-      <div v-if="offerAgreement && $store.state.isAmountFieldVisible" class="donation__form__field otherAmount">
-        <label for="donationSum">{{ $locale('form.enterAmountValue') }}</label>
-        <input v-model.number="amountSum" class="textField" type="number" id="donationSum" name="sum"
+      <div v-show="offerAgreement && $store.state.isAmountFieldVisible"
+        class="donation__form-field otherAmount" >
+        <label for="donationSum" class="donation__form-label">{{ $locale('form.enterAmountValue') }}</label>
+        <input v-model.number="amountSum" class="donation__form-text" type="number" id="donationSum" name="sum" ref="userAmount"
                :placeholder="$locale('form.amountPlaceholder')">
       </div>
 
       <!-- btn -->
-      <div class="donation__form__field">
-        <input class="submitBtn" id="submit" type="submit"
+      <div class="donation__form-field">
+        <input class="donation__form-submit" id="submit" type="submit"
                :class="$store.state.isNameValid && $store.state.isEmailValid
-          && $store.state.isOfferAgreement && $store.state.isBtnActive
-            ? 'active' : ''"
+                 && $store.state.isOfferAgreement && $store.state.isBtnActive
+                   ? 'active' : ''"
                :value="`${ $locale('form.submitBtn') } ${ $store.state.amountValue ?
                $store.state.amountValue + currencySign
-               : ''}`">
+               : ''}`"
+        >
       </div>
-      <div class="paymentLogos">
+      <div class="payment-logos">
         <img v-for="icon in paymentIcons" :key="icon.id" class="logo" :src="icon.logo" :alt="icon.alt">
       </div>
     </form>
@@ -369,6 +370,11 @@ export default {
     },
     setAmount(value) {
       this.$store.commit('addAmount', value)
+
+      if (value === 'other') {
+        this.$nextTick(() => this.$refs.userAmount.focus())
+      }
+
       this.isFormValid()
     },
     isMailValid(value) {

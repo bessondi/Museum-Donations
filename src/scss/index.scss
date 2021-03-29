@@ -1,38 +1,10 @@
 @import "~normalize.css";
-@import "fonts";
-@import "colors";
 @import "variables";
+@import "colors";
 
+@import "common";
+@import "fonts";
+@import "content";
+@import "donation";
 @import "offer";
 @import "gratitude";
-
-body {
-  font-family: 'CirceLight', sans-serif;
-  font-size: 1.1rem;
-  line-height: 1.3;
-}
-
-input {
-  outline: none;
-}
-
-a {
-  text-decoration: none;
-  color: $linkColor;
-
-  &:visited {
-    color: $linkColor;
-  }
-}
-
-.wrapper {
-  display: flex;
-  justify-content: center;
-
-  @media screen and (min-width: $tabletWidth) {
-    background: $activeOptionBtn;
-  }
-
-  @import "content";
-  @import "donation";
-}
