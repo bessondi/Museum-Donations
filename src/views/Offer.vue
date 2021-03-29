@@ -1,7 +1,7 @@
 <template>
   <div class="offer">
-    <router-link to="/" class="donation__form-button back">
-      <button>{{ $locale('form.backBtn') }}</button>
+    <router-link to="/">
+      <button class="offer__button-back">{{ $locale('form.backBtn') }}</button>
     </router-link>
 
 <!--    {{ $locale('form.offerText') }}-->

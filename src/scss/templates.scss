@@ -23,3 +23,20 @@
     box-shadow: none;
   }
 }
+
+%button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 15px 20px;
+  background: $optionBtn;
+  border-radius: $btnRadius;
+  border: none;
+  outline: none;
+
+  &:hover {
+    background: $hoverOptionBtn;
+    cursor: pointer;
+  }
+}

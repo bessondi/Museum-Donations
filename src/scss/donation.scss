@@ -1,3 +1,5 @@
+@import "templates";
+
 .donation {
   display: flex;
   flex-direction: column;
@@ -157,14 +159,8 @@
   }
 
   &__form-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 15px 20px;
+    @extend %button;
     margin-right: 10px;
-    background: $optionBtn;
-    border-radius: $btnRadius;
 
     &:last-child {
       margin-right: 0;
@@ -173,10 +169,6 @@
     @media screen and (max-width: $mobileWidth) {
       margin-top: 15px;
       margin-right: 0;
-    }
-
-    &:hover {
-      background: $hoverOptionBtn;
     }
 
     &.checked {
