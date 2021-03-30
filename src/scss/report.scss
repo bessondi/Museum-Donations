@@ -1,0 +1,36 @@
+@import "templates";
+
+.report {
+  @extend %page;
+
+  &__button-back {
+    @extend %button;
+  }
+
+  &__heading {
+    margin: 50px 0;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__item-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__item-logo {
+    height: 80px;
+  }
+
+  &__item-title {
+    margin-top: 20px;
+    color: $text;
+  }
+}

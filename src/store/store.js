@@ -88,7 +88,7 @@ export const ru = {
   form: {
     changeLangBtn: 'en',
     heading: 'Пожертвование Музею Фаберже',
-    description: 'Музей Фаберже в Санкт-Петербурге и НО «Культурно-Исторический Фонд «Связь времен» приглашает Вас поддержать Музей, осуществив пожертвование на счет Фонда на его уставную деятельность. Ваше участие станет значимой помощью в деле поддержки нашего Музея, которая позволит ему в полной мере выполнять свои основные задачи: собирать, изучать и популяризировать русское искусство!',
+    description: 'Пожертвуйте на деятельность Музея Фаберже!\n Приглашаем Вас поддержать Музей Фаберже в Санкт-Петербурге, осуществив пожертвование на счет НО «Культурно-исторический Фонд «Связь времен». Ваша помощь поможет нашему музею радовать россиян и гостей со всего мира своей уникальной коллекцией и масштабными выставочными, издательскими и просветительскими проектами. Для нас ценна любая Ваша помощь, как и понимание того, что Вам небезразлична судьба Музея Фаберже!',
     nameLabel: 'Ваше имя',
     surnameLabel: 'Ваша фамилия',
     namePlaceholder: 'Карл',
@@ -103,12 +103,11 @@ export const ru = {
     amountPlaceholder: 'Минимальная сумма 200 рублей',
     submitBtn: 'Пожертвовать',
     gratitudeDefaultText: 'Уважаемый благотворитель!',
-    gratitudeText: `Музей Фаберже благодарит Вас за пожертвование в пользу музея!
-      Мы признательны Вам за то, что Вы разделяете нашу ответственность за развитие Музея Фаберже.
-      Культура в России всегда была связана с деятельностью меценатов, и Вы, совершая пожертвование, продолжаете эту традицию.`,
+    gratitudeText: 'Благодарим Вас за пожертвование в пользу Музея Фаберже!\n История культуры и искусства в России неразрывно связна с деятельностью меценатов, и, совершая пожертвование, Вы продолжаете эту славную традицию.\n Всегда ждем Вас в Музее Фаберже в Санкт-Петербурге!',
     backBtn: 'Вернуться назад',
     saveBtn: 'Сохранить',
-    offerText: 'Текст Договора - оферты'
+    offerText: 'Текст Договора - оферты',
+    reportTitle: 'Отчет по работе музея'
   }
 }
 
@@ -116,7 +115,7 @@ export const en = {
   form: {
     changeLangBtn: 'ru',
     heading: 'Donations for Fabergé Museum',
-    description: 'The Fabergé Museum in St. Petersburg and the Cultural and Historical Foundation «The Link of Times» invites you to support Museum by making a donation to the Foundation\'s account for its statutory activities. Your participation will be a significant help in supporting our Museum, which will allow it to fully fulfill its main tasks: to collect, study and popularize Russian art!',
+    description: 'Donate to the activities of the Fabergé Museum!\n We invite you to support the Fabergé Museum in St. Petersburg by making a donation to the account of the Cultural and Historical Foundation «Link of Times». Your help will help our museum delight Russians and guests from around the world with its unique collection and large-scale exhibition, publishing and educational projects. We appreciate all your help, as well as the understanding that you care about the fate of the Fabergé Museum!',
     nameLabel: 'First name',
     surnameLabel: 'Last name',
     namePlaceholder: 'Carl',
@@ -131,11 +130,10 @@ export const en = {
     amountPlaceholder: 'Minimum amount are 5 currency units',
     submitBtn: 'Donate',
     gratitudeDefaultText: 'Dear donator!',
-    gratitudeText: `The Fabergé Museum would like to thank you for your donation!
-      We are grateful that you share our responsibility for the development of the Fabergé Museum.
-      Culture in Russia has always been linked to the activities of patrons of the arts, and by making a donation you are continuing this tradition.`,
+    gratitudeText: 'Thank you for your donation to the Fabergé Museum!\n The history of culture and art in Russia is inextricably linked to the activities of patrons of the arts, and by making a donation you are continuing this glorious tradition.\n We are always looking forward to seeing you at the Fabergé Museum in St. Petersburg!',
     backBtn: 'Back to donation',
     saveBtn: 'Save',
-    offerText: 'Offer Text'
+    offerText: 'Offer Text',
+    reportTitle: 'Report on the museum\'s work'
   }
 }

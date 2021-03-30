@@ -2,13 +2,13 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Main from '../views/Main.vue'
 import Offer from "@/views/Offer"
 import Gratitude from "@/views/Gratitude"
-import Report from "@/views/Report"
+import Reports from "@/views/Reports"
 
 const routes = [
   { path: '/', component: Main },
   { path: '/offer', component: Offer },
   { path: '/gratitude', component: Gratitude },
-  { path: '/report', component: Report },
+  { path: '/reports', component: Reports },
   // { path: '/offer', component: () => import(/* webpackChunkName: "offer" */ '../views/Offer.vue') }
   // { path: '/gratitude', component: () => import(/* webpackChunkName: "gratitude" */ '../views/Gratitude.vue') },
 ]

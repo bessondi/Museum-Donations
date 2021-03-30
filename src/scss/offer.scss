@@ -1,14 +1,9 @@
 @import "templates";
 
 .offer {
- @extend %page;
-
-  & > a {
-    align-self: start;
-  }
+  @extend %page;
 
   &__button-back {
     @extend %button;
-    font-weight: bold;
   }
 }

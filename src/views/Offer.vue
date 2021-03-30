@@ -6,8 +6,8 @@
 
 <!--    {{ $locale('form.offerText') }}-->
 
-    <h1 class="heading">Текст договора оферты</h1>
-    <p class="description">
+    <h1 class="offer__heading">Текст договора оферты</h1>
+    <p class="offer__description">
       Текст Договора - оферты:
       г. Москва
       ______________________________________________________________, именуемый

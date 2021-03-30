@@ -2,22 +2,26 @@
   font-family: "GothamPro-Light";
   src: url("../assets/fonts/GothamPro-Light.woff") format('woff');
   font-display: fallback;
+  color: $text;
 }
 
 @font-face {
   font-family: "PlayfairDisplay";
   src: url("../assets/fonts/PlayfairDisplay-Regular.ttf") format('truetype');
   font-display: fallback;
+  color: $text;
 }
 
 @font-face {
   font-family: "CirceLight";
   src: url("../assets/fonts/Circe-Light.ttf") format('truetype');
   font-display: fallback;
+  color: $text;
 }
 
 @font-face {
   font-family: "CirceBold";
   src: url("../assets/fonts/Circe-Bold.ttf") format('truetype');
   font-display: fallback;
+  color: $text;
 }
