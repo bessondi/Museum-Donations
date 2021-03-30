@@ -5,16 +5,23 @@
         <img class="logo" :src="backIcon" alt="back to main page">
       </a>
 
-      <button @click="changeLang" class="icon">
-        <img class="logo"
-             :src="$locale('form.changeLangBtn') === 'ru'
+      <div class="donation__header-buttons">
+        <router-link to="/reports" class="icon">
+          <img class="logo" :src="pdfLogo" alt="reports">
+        </router-link>
+
+        <button @click="changeLang" class="icon">
+          <img class="logo"
+               :src="$locale('form.changeLangBtn') === 'ru'
               ? languageIcons.ru : languageIcons.en" alt="language">
-      </button>
+        </button>
+      </div>
     </div>
 
     <div class="donation__title">
       <h1 class="donation__title-heading">{{ $locale('form.heading') }}</h1>
-      <p class="donation__title-description">{{ $locale('form.description') }}</p>
+      {{ this.splitLine(this.$locale('form.description')) }}
+      <p v-html="descriptionText" class="donation__title-description" />
     </div>
 
     <form @submit.prevent="getPay" class="donation__form">
@@ -64,7 +71,7 @@
         <router-link to="/offer">
           <img class="logo" :src="linkIcon" alt="offer">
         </router-link>
-        <small class="donation__form-note">{{ $locale('form.note') }}</small>
+        <p class="donation__form-note">{{ $locale('form.note') }}</p>
 
         <!--        <input v-model="isEmailSubscription" type="checkbox" id="emailSubscription" name="emailSubscription">-->
         <!--        <label class="agreement" for="emailSubscription"> Хочу получать письма на эл.почту</label>-->
@@ -156,6 +163,7 @@ import payIcon2 from '@/assets/svg/g-pay.svg'
 import payIcon3 from '@/assets/svg/logo-visa.svg'
 import payIcon4 from '@/assets/svg/logo-mastercard.svg'
 import payIcon5 from '@/assets/svg/logo-mir.svg'
+import pdfLogo from '../assets/svg/pdf.svg'
 
 let routeTo
 const changeRouter = function (ctx) {
@@ -164,7 +172,9 @@ const changeRouter = function (ctx) {
   }
 }
 
-function pay(amount, email, recurrent, locale, currency, name = '', surname = '') {
+function pay(options) {
+  const {amount, email, recurrent, locale, currency} = options
+
   const widgetLanguage = locale === 'en' ? 'en-US' : 'ru-RU'
 
   const widget = new cp.CloudPayments({language: widgetLanguage})
@@ -183,8 +193,8 @@ function pay(amount, email, recurrent, locale, currency, name = '', surname = ''
 
   const apiKey = 'pk_5dd54d4b5d9a17e641da689238624'
 
-  const storageName = localStorage.getItem('name')
-  const storageSurname = localStorage.getItem('surname')
+  // const storageName = localStorage.getItem('name')
+  // const storageSurname = localStorage.getItem('surname')
 
   widget.pay('auth', // или 'charge'
     { // options
@@ -212,7 +222,7 @@ function pay(amount, email, recurrent, locale, currency, name = '', surname = ''
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
 
-        // routeTo('/gratitude')
+        routeTo('/gratitude')
       },
       onComplete: function (paymentResult, options) {
         // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
@@ -256,8 +266,10 @@ export default {
         ru: langIconRU,
         en: langIconEN,
       },
-      linkIcon: linkIcon,
-      backIcon: backIcon
+      linkIcon,
+      backIcon,
+      pdfLogo,
+      descriptionText: null
     }
   },
   computed: {
@@ -349,7 +361,7 @@ export default {
         this.$store.commit('updateAmount', value)
         this.isFormValid()
       }
-    }
+    },
   },
   methods: {
     getPay() {
@@ -365,7 +377,16 @@ export default {
           ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
 
         changeRouter(this)
-        pay(this.amountSum, this.email, isRecurrent, this.locale, this.currency, this.name, this.surname)
+
+        pay({
+          amount:this.amountSum,
+          email:this.email,
+          recurrent:isRecurrent,
+          locale:this.locale,
+          currency:this.currency,
+          name:this.name,
+          surname:this.surname
+        })
       }
     },
     setAmount(value) {
@@ -402,6 +423,9 @@ export default {
     },
     changeCurrencyType(currencyType) {
       this.$store.commit('updateCurrency', currencyType)
+    },
+    splitLine(text) {
+      this.descriptionText = text.split('\n').map(t => t).join('<br/>')
     }
   },
   mounted() {

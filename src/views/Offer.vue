@@ -1,13 +1,13 @@
 <template>
   <div class="offer">
-    <router-link to="/" class="donation__form-button back">
-      <button>{{ $locale('form.backBtn') }}</button>
+    <router-link to="/">
+      <button class="offer__button-back">{{ $locale('form.backBtn') }}</button>
     </router-link>
 
 <!--    {{ $locale('form.offerText') }}-->
 
-    <h1 class="heading">Текст договора оферты</h1>
-    <p class="description">
+    <h1 class="offer__heading">Текст договора оферты</h1>
+    <p class="offer__description">
       Текст Договора - оферты:
       г. Москва
       ______________________________________________________________, именуемый

@@ -6,7 +6,8 @@
     </div>
 
     <h1 class="gratitude__heading">{{ getName }}</h1>
-    <p class="gratitude__description">{{ $locale('form.gratitudeText') }}</p>
+    {{ splitLine($locale('form.gratitudeText')) }}
+    <p v-html="descriptionText" class="gratitude__description" />
 
     <img :src="image" alt="Museum image" class="gratitude__image">
   </div>
@@ -32,7 +33,8 @@ export default {
         ru: fabergeLogoRu,
         en: fabergeLogoEn,
       },
-      image
+      image,
+      descriptionText: null
     }
   },
   computed: {
@@ -45,6 +47,9 @@ export default {
     }
   },
   methods: {
+    splitLine(text) {
+      this.descriptionText = text.split('\n').map(t => t).join('<br/>')
+    },
     saveAsImage() {
       window.scrollTo(0, 0)
 

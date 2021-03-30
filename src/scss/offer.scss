@@ -1,24 +1,9 @@
 @import "templates";
 
 .offer {
- @extend %page;
+  @extend %page;
 
-  .donation__form-button {
-    align-self: start;
-
-    & button {
-      font-weight: bold;
-      padding: 15px 20px;
-      margin-right: 10px;
-      background: $optionBtn;
-      border-radius: $btnRadius;
-      border: none;
-      outline: none;
-
-      &:hover {
-        background: $hoverOptionBtn;
-        cursor: pointer;
-      }
-    }
+  &__button-back {
+    @extend %button;
   }
 }
