@@ -51,7 +51,7 @@ export default {
       this.descriptionText = text.split('\n').map(t => t).join('<br/>')
     },
     saveAsImage() {
-      window.scrollTo(0, 0)
+      this.scrollToTop()
 
       const options = {
         width: 1080,
@@ -70,7 +70,13 @@ export default {
           link.click()
           link.delete
         })
+    },
+    scrollToTop() {
+      window.scrollTo(0, 0)
     }
+  },
+  mounted() {
+    this.scrollToTop()
   }
 }
 

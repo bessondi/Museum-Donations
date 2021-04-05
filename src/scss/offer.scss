@@ -2,8 +2,36 @@
 
 .offer {
   @extend %page;
+  text-align: justify;
 
   &__button-back {
     @extend %button;
+  }
+
+  ol {
+    counter-reset: num;
+  }
+
+  li {
+    display: block;
+  }
+
+  li:before {
+    content: counters(num, ".") ".";
+    counter-increment: num;
+  }
+
+  &__heading {
+    text-align: center;
+    margin-top: 40px;
+    text-transform: uppercase;
+  }
+
+  &__description-list {
+    padding: 0;
+  }
+
+  &__description-item {
+    margin-bottom: 25px;
   }
 }
