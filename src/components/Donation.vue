@@ -165,15 +165,8 @@ import payIcon4 from '@/assets/svg/logo-mastercard.svg'
 import payIcon5 from '@/assets/svg/logo-mir.svg'
 import pdfLogo from '../assets/svg/pdf.svg'
 
-let routeTo
-const changeRouter = function (ctx) {
-  routeTo = function (path) {
-    ctx.$router.push(path)
-  }
-}
-
 function pay(options) {
-  const {amount, email, recurrent, locale, currency} = options
+  const {amount, email, recurrent, locale, currency, ctx} = options
 
   const widgetLanguage = locale === 'en' ? 'en-US' : 'ru-RU'
 
@@ -217,12 +210,15 @@ function pay(options) {
 
         // name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
         // surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
-        routeTo('/gratitude')
+
+        ctx.showGratitude()
+        ctx.$router.push('/gratitude')
       },
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
 
-        routeTo('/gratitude')
+        ctx.showGratitude()
+        ctx.$router.push('/gratitude')
       },
       onComplete: function (paymentResult, options) {
         // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
@@ -376,8 +372,6 @@ export default {
         const isRecurrent = this.$store.state.recurrentPicked === 'single'
           ? false : this.$store.state.recurrentPicked === 'monthly' ? true : null
 
-        changeRouter(this)
-
         pay({
           amount:this.amountSum,
           email:this.email,
@@ -385,7 +379,8 @@ export default {
           locale:this.locale,
           currency:this.currency,
           name:this.name,
-          surname:this.surname
+          surname:this.surname,
+          ctx: this
         })
       }
     },
@@ -423,6 +418,9 @@ export default {
     },
     changeCurrencyType(currencyType) {
       this.$store.commit('updateCurrency', currencyType)
+    },
+    showGratitude() {
+      this.$store.commit('showGratitude')
     },
     splitLine(text) {
       this.descriptionText = text.split('\n').map(t => t).join('<br/>')

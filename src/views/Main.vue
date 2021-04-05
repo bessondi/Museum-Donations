@@ -32,7 +32,7 @@ export default {
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize)
-  },
+  }
 }
 </script>
 
