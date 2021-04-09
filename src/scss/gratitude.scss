@@ -3,6 +3,7 @@
 .wrap {
   display: flex;
   flex-direction: column;
+  animation: showContent 3s ease-in-out;
 
   .gratitude {
     @extend %page;
