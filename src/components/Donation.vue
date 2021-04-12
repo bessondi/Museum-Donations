@@ -184,6 +184,14 @@ function pay(options) {
     }
   }
 
+  const descriptionTitle = recurrent && widgetLanguage === 'ru-RU'
+    ? `Подписка на ежемесячное пожертвование Музею Фаберже на сумму ${amount} ${currency}`
+    : !recurrent && widgetLanguage === 'ru-RU'
+      ? `Пожертвование Музею Фаберже в сумме ${amount} ${currency}`
+      : recurrent && widgetLanguage !== 'ru-RU'
+        ? `Subscription for a monthly donation to the Fabergé Museum in the amount of ${amount} ${currency}`
+        : `Donation to the Fabergé Museum in the amount of ${amount} ${currency}`
+
   const apiKey = 'pk_5dd54d4b5d9a17e641da689238624'
 
   // const storageName = localStorage.getItem('name')
@@ -192,9 +200,7 @@ function pay(options) {
   widget.pay('auth', // или 'charge'
     { // options
       publicId: apiKey, // id из личного кабинета
-      description: widgetLanguage === 'ru-RU'
-        ? `Пожертвование Музею Фаберже в сумме ${amount} ${currency}`
-        : `Donation to the Fabergé Museum in the amount of ${amount} ${currency}`, // назначение
+      description: descriptionTitle,
       amount: amount, // сумма
       currency: currency, // валюта,
       email: email,

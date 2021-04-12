@@ -20,3 +20,12 @@ a {
 ol {
   padding-left: 15px;
 }
+
+@keyframes showContent {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
