@@ -185,7 +185,7 @@ function pay(options) {
   }
 
   const descriptionTitle = recurrent && widgetLanguage === 'ru-RU'
-    ? `Подписка на ежемесячное пожертвование Музею Фаберже в сумме ${amount} ${currency}`
+    ? `Подписка на ежемесячное пожертвование Музею Фаберже на сумму ${amount} ${currency}`
     : !recurrent && widgetLanguage === 'ru-RU'
       ? `Пожертвование Музею Фаберже в сумме ${amount} ${currency}`
       : recurrent && widgetLanguage !== 'ru-RU'
@@ -223,8 +223,8 @@ function pay(options) {
       onFail: function (reason, options) {
         // fail - действие при неуспешной оплате
 
-        // ctx.showGratitude()
-        // ctx.$router.push('/gratitude')
+        ctx.showGratitude()
+        ctx.$router.push('/gratitude')
       },
       onComplete: function (paymentResult, options) {
         // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.

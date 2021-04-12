@@ -9,12 +9,7 @@ const routes = [
   { path: '/', component: Main },
   { path: '/offer', component: Offer },
   { path: '/reports', component: Reports },
-  {
-    path: '/gratitude',
-    component: () => {
-      return store.state.isGratitudeAvailable ? Gratitude : null
-    }
-  }
+  { path: '/gratitude', component: Gratitude }
 ]
 
 const router = createRouter({
@@ -23,6 +18,12 @@ const router = createRouter({
 })
 
 router.beforeEach(function (to, from, next) {
+  if (to.fullPath === '/gratitude') {
+    if (!store.state.isGratitudeAvailable) {
+      next('/')
+    }
+  }
+
   setTimeout(() => {
     window.scrollTo(0, 0);
   }, 0)
