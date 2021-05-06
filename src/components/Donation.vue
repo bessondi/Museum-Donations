@@ -6,15 +6,23 @@
       </a>
 
       <div class="donation__header-buttons">
-        <router-link to="/reports" class="icon">
-          <img class="logo" :src="pdfLogo" alt="reports">
+        <router-link v-if="$locale('form.changeLangBtn') === 'ru'" to="/reports" class="icon">
+          <span class="donation__header-buttons__reports">{{ $locale('form.reportsBtn') }}</span>
         </router-link>
+        <router-link v-else to="/reports" class="icon">
+          <span class="donation__header-buttons__reports">{{ $locale('form.reportsBtn') }}</span>
+        </router-link>
+
+<!--        <router-link to="/reports" class="icon">-->
+<!--          <img class="logo" :src="pdfLogo" alt="reports">-->
+<!--        </router-link>-->
 
         <button @click="changeLang" class="icon">
           <img class="logo"
                :src="$locale('form.changeLangBtn') === 'ru'
-              ? languageIcons.ru : languageIcons.en" alt="language">
+               ? languageIcons.ru : languageIcons.en" alt="language">
         </button>
+
       </div>
     </div>
 
@@ -192,10 +200,7 @@ function pay(options) {
         ? `Subscription for a monthly donation to the Fabergé Museum in the amount of ${amount} ${currency}`
         : `Donation to the Fabergé Museum in the amount of ${amount} ${currency}`
 
-  const apiKey = 'pk_5dd54d4b5d9a17e641da689238624'
-
-  // const storageName = localStorage.getItem('name')
-  // const storageSurname = localStorage.getItem('surname')
+  const apiKey = 'pk_5dd54d4b5d9a17e641da689238624' // Public ID из личного кабинета CloudPayments
 
   widget.pay('auth', // или 'charge'
     { // options
@@ -212,22 +217,20 @@ function pay(options) {
     },
     {
       onSuccess: function (options) {
-        // 2 - success - действие при успешной оплате
-
-        // name !== '' && !storageName ? localStorage.setItem('name', name) : 'null'
-        // surname !== '' && !storageSurname ? localStorage.setItem('surname', surname) : null
+        // 2 - success - действие при успешной оплате - выводим благодарственное сообщение
 
         ctx.showGratitude()
         ctx.$router.push('/gratitude')
       },
       onFail: function (reason, options) {
-        // fail - действие при неуспешной оплате
+        // fail - действие при неуспешной оплате или отмене оплаты
 
-        ctx.showGratitude()
-        ctx.$router.push('/gratitude')
+        // ctx.showGratitude()
+        // ctx.$router.push('/gratitude')
       },
       onComplete: function (paymentResult, options) {
         // 1 - complete - Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
+
       }
     }
   )

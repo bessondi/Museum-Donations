@@ -24,11 +24,8 @@ import image from "@/assets/img/BlueRoom.jpg"
 export default {
   data() {
     return {
-      // firstName: localStorage.getItem('name'),
-      // lastName: localStorage.getItem('surname'),
       firstName: this.$store.state.nameValue,
       lastName: this.$store.state.surnameValue,
-
       fabergeLogos: {
         ru: fabergeLogoRu,
         en: fabergeLogoEn,

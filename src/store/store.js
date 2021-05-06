@@ -84,9 +84,7 @@ export default createStore({
     showGratitude (state) {
       state.isGratitudeAvailable = true
     }
-  },
-  actions: {},
-  modules: {}
+  }
 })
 
 
@@ -94,6 +92,7 @@ export const ru = {
   form: {
     currentLang: 'ru',
     changeLangBtn: 'en',
+    reportsBtn: 'отчеты',
     heading: 'Пожертвование Музею Фаберже',
     description: 'Пожертвуйте на деятельность Музея Фаберже!\n Приглашаем Вас поддержать Музей Фаберже в Санкт-Петербурге, осуществив пожертвование на счет НО «Культурно-исторический Фонд «Связь времен». Ваша помощь поможет нашему музею радовать россиян и гостей со всего мира своей уникальной коллекцией и масштабными выставочными, издательскими и просветительскими проектами. Для нас ценна любая Ваша помощь, как и понимание того, что Вам небезразлична судьба Музея Фаберже!',
     nameLabel: 'Ваше имя',
@@ -113,7 +112,8 @@ export const ru = {
     gratitudeText: 'Благодарим Вас за пожертвование в пользу Музея Фаберже!\n История культуры и искусства в России неразрывно связна с деятельностью меценатов, и, совершая пожертвование, Вы продолжаете эту славную традицию.\n Всегда ждем Вас в Музее Фаберже в Санкт-Петербурге!',
     backBtn: 'Вернуться назад',
     saveBtn: 'Сохранить',
-    reportTitle: 'Отчет по работе музея'
+    reportTitle: 'Отчет по работе музея',
+    reportDescription: 'Здесь вы можете ознакомиться с отчетами по пожертвованиям.',
   }
 }
 
@@ -121,6 +121,7 @@ export const en = {
   form: {
     currentLang: 'en',
     changeLangBtn: 'ru',
+    reportsBtn: 'reports',
     heading: 'Donations for Fabergé Museum',
     description: 'Donate to the activities of the Fabergé Museum!\n We invite you to support the Fabergé Museum in St. Petersburg by making a donation to the account of the Cultural and Historical Foundation «Link of Times». Your help will help our museum delight Russians and guests from around the world with its unique collection and large-scale exhibition, publishing and educational projects. We appreciate all your help, as well as the understanding that you care about the fate of the Fabergé Museum!',
     nameLabel: 'First name',
@@ -140,6 +141,7 @@ export const en = {
     gratitudeText: 'Thank you for your donation to the Fabergé Museum!\n The history of culture and art in Russia is inextricably linked to the activities of patrons of the arts, and by making a donation you are continuing this glorious tradition.\n We are always looking forward to seeing you at the Fabergé Museum in St. Petersburg!',
     backBtn: 'Back to donation',
     saveBtn: 'Save',
-    reportTitle: 'Report on the museum\'s work'
+    reportTitle: 'Report on the museum\'s work',
+    reportDescription: 'Donation reports are available here.',
   }
 }

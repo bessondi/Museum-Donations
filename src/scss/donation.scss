@@ -48,11 +48,37 @@
     }
   }
 
+  //&__header-buttons {
+  //  display: inherit;
+  //  justify-content: space-between;
+  //  width: 80px;
+  //}
+
   &__header-buttons {
     display: inherit;
     justify-content: space-between;
-    width: 80px;
+    width: 150px;
+
+    & > a.icon {
+      width: 100px;
+    }
+
+    &__reports {
+      display: block;
+      width: 100%;
+      padding: 3px;
+      border: 1px solid $inputBorder;
+      border-radius: $btnRadius;
+      text-align: center;
+      color: $text;
+
+      &:hover {
+        background: $hoverActiveOptionBtn;
+        color: $optionBtn;
+      }
+    }
   }
+
 
   &__title-heading {
     font-family: 'PlayfairDisplay', serif;
@@ -165,7 +191,6 @@
 
   &__form-agreement {
     margin-left: 5px;
-    //font-size: 1rem;
   }
 
   &__form-button {
