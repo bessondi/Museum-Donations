@@ -17,9 +17,9 @@ module.exports = {
       .options({
         name: 'assets/pdf/[name].[hash:8].[ext]'
       })
-  }
+  },
 
-  // publicPath: process.env.NODE_ENV === 'production'
-  //   ? '/Museum-Donations/'
-  //   : '/'
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/Museum-Donations/'
+    : '/'
 }
