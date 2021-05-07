@@ -1,5 +1,5 @@
 ## Museum Donations
 
-[Demo](https://demo-payments.000webhostapp.com)
+[Demo](https://bessondi.github.io/Museum-Donations/)
 
 ![preview](preview.png)

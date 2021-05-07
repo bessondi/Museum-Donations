@@ -5,8 +5,7 @@ module.exports = {
     config
       .plugin('html')
       .tap(args => {
-        // args[0].title = "Fabergé Museum Donations"
-        args[0].title = "Пожертвование Музею Фаберже"
+        args[0].title = "Пожертвование Музею Фаберже | Fabergé Museum Donations"
         return args
       })
 
@@ -17,9 +16,9 @@ module.exports = {
       .options({
         name: 'assets/pdf/[name].[hash:8].[ext]'
       })
-  }
+  },
 
-  // publicPath: process.env.NODE_ENV === 'production'
-  //   ? '/Museum-Donations/'
-  //   : '/'
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/Museum-Donations/'
+    : '/'
 }
