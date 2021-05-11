@@ -123,7 +123,7 @@ export const en = {
     changeLangBtn: 'ru',
     reportsBtn: 'reports',
     heading: 'Donations for Fabergé Museum',
-    description: 'Donate to the activities of the Fabergé Museum!\n We invite you to support the Fabergé Museum in St. Petersburg by making a donation to the account of the Cultural and Historical Foundation «Link of Times». Your help will help our museum delight Russians and guests from around the world with its unique collection and large-scale exhibition, publishing and educational projects. We appreciate all your help, as well as the understanding that you care about the fate of the Fabergé Museum!',
+    description: 'Donate to the activities of the Fabergé Museum!\n We invite you to support the Fabergé Museum in St. Petersburg by making a donation to the account of the Cultural and Historical Foundation «Link of Times». Your contribution will help our Museum to delight Russians and guests from around the world with its unique collection and large-scale exhibition, publishing and educational projects. We appreciate all your help, as well as the understanding that you care about the fate of the Fabergé Museum!',
     nameLabel: 'First name',
     surnameLabel: 'Last name',
     namePlaceholder: 'Carl',
