@@ -5,6 +5,7 @@
         <img class="logo" :src="backIcon" alt="back to main page">
       </a>
 
+<!--   кнопки отчетов и смены языка   -->
       <div class="donation__header-buttons">
         <router-link v-if="$locale('form.changeLangBtn') === 'ru'" to="/reports" class="icon">
           <span class="donation__header-buttons__reports">{{ $locale('form.reportsBtn') }}</span>
@@ -13,16 +14,11 @@
           <span class="donation__header-buttons__reports">{{ $locale('form.reportsBtn') }}</span>
         </router-link>
 
-<!--        <router-link to="/reports" class="icon">-->
-<!--          <img class="logo" :src="pdfLogo" alt="reports">-->
-<!--        </router-link>-->
-
         <button @click="changeLang" class="icon">
           <img class="logo"
                :src="$locale('form.changeLangBtn') === 'ru'
                ? languageIcons.ru : languageIcons.en" alt="language">
         </button>
-
       </div>
     </div>
 
@@ -200,7 +196,7 @@ function pay(options) {
         ? `Subscription for a monthly donation to the Fabergé Museum in the amount of ${amount} ${currency}`
         : `Donation to the Fabergé Museum in the amount of ${amount} ${currency}`
 
-  const apiKey = 'pk_5dd54d4b5d9a17e641da689238624' // Public ID из личного кабинета CloudPayments
+  const apiKey = 'pk_ef82564262598c9ab622d1db082ca' // Public ID из личного кабинета CloudPayments
 
   widget.pay('auth', // или 'charge'
     { // options
