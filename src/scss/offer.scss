@@ -17,7 +17,7 @@
   }
 
   li:before {
-    content: counters(num, ".") ".";
+    content: counters(num, ".") ". ";
     counter-increment: num;
   }
 

@@ -5,6 +5,7 @@
         <img class="logo" :src="backIcon" alt="back to main page">
       </a>
 
+<!--   кнопки отчетов и смены языка   -->
       <div class="donation__header-buttons">
         <router-link v-if="$locale('form.changeLangBtn') === 'ru'" to="/reports" class="icon">
           <span class="donation__header-buttons__reports">{{ $locale('form.reportsBtn') }}</span>
